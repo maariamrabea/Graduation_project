@@ -4,8 +4,8 @@ import 'package:graduationproject/registration/afterscreen.dart';
 
 import '../fontstyle.dart';
 
-class Screen3 extends StatelessWidget {
-  const Screen3({super.key, required int currentPage});
+class Third_Screen extends StatelessWidget {
+  const Third_Screen({super.key, required int currentPage});
 
   @override
   Widget build(BuildContext context) {
@@ -28,16 +28,14 @@ class Screen3 extends StatelessWidget {
             child: buildDots(currentPage),
           ),
           Positioned(
-            top: screenHeight * (574 / screenHeight),
-            left: screenWidth * (55 / screenWidth),
-            child: Text(
-              "Track your mood and \n   reflect on your day",
-              style: AppTextStyles.headline3,
-            ),
-          ),
+              top: screenHeight * (574 / screenHeight),
+              left: screenWidth * (45 / screenWidth),
+              child: Text(
+                  "Track your mood and \n   reflect on your day",
+                  style:AppTextStyles.f24.copyWith(color: Colors.white))),
           Positioned(
             top: screenHeight * (686 / screenHeight),
-            left: screenWidth * (156 / screenWidth),
+            left: screenWidth * (162 / screenWidth),
             child: Container(
               width: screenWidth * (62 / screenWidth),
               height: screenWidth * (62 / screenWidth),

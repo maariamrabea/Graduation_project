@@ -1,13 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:graduationproject/Widget/ElevatedButton.dart';
 import 'package:graduationproject/Widget/arrow_back.dart';
-import 'package:graduationproject/appbar.dart';
+import 'package:graduationproject/BottomBar.dart';
 import 'package:graduationproject/fontstyle.dart';
 import 'package:graduationproject/logic/_buildSocialButton.dart';
 import 'package:graduationproject/logic/buildTextField.dart';
-import 'package:graduationproject/onpording/first%20one.dart';
 import 'package:graduationproject/registration/sign%20up.dart';
+
+import '../onpording/Frist_Screen.dart';
+import 'forgetpass.dart';
 
 class Login extends StatelessWidget {
   const Login({super.key});
@@ -22,26 +23,28 @@ class Login extends StatelessWidget {
       body: Stack(
         children: [
           Positioned(
-              top: screenHeight * (45 / screenHeight),
-              left: screenWidth * (8 / screenWidth),
-              child: CustomIconButton(
-                color: Colors.white,
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => FristScreen(),
-                      ));
-                },
-              )),
+            top: screenHeight * (45 / screenHeight),
+            left: screenWidth * (8 / screenWidth),
+            child: CustomIconButton(
+              color: Colors.white,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Frist_Screen()),
+                );
+              },
+            ),
+          ),
           Positioned(
             top: screenHeight * 0.148,
             left: screenWidth * (20 / screenWidth),
             child: Text(
               "Login to your account",
-              style: AppTextStyles.headline4)
-
-
+              style: AppTextStyles.f24.copyWith(
+                color: Colors.white,
+                fontSize: 22,
+              ),
+            ),
           ),
           Positioned(
             top: screenHeight * 0.232,
@@ -69,37 +72,41 @@ class Login extends StatelessWidget {
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Forgetpass()),
+                        );
+                      },
                       child: Text(
                         "Forgot Password?",
-                        style: AppTextStyles.headline2,
+                        style: AppTextStyles.f14.copyWith(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w300,
+                        ),
                       ),
                     ),
                   ),
                   const SizedBox(height: 50),
-                  elevatedButton(
-                    onPressed: () { Navigator.push(
+                  Elevated_Button(
+                    onPressed: () {
+                      Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => BottomBar(),
-                        ));},
+                        MaterialPageRoute(builder: (context) => BottomBar()),
+                      );
+                    },
                     text: 'Login',
                   ),
                   const SizedBox(height: 20),
                   Center(
-                    child: Text(
-                      "or login with",
-                      style: AppTextStyles.headline2,
-                    ),
+                    child: Text("or login with", style: AppTextStyles.f14),
                   ),
                   const SizedBox(height: 12),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       buildSocialButton("images/Vector.png", context),
-                      const SizedBox(
-                        width: 30,
-                      ),
+                      const SizedBox(width: 30),
                       buildSocialButton("images/facebook.png", context),
                     ],
                   ),
@@ -107,18 +114,13 @@ class Login extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        "Don’t have an account? ",
-                        style: AppTextStyles.headline2,
-                      ),
+                      Text("Don’t have an account? ", style: AppTextStyles.f14),
                       GestureDetector(
-                        onTap: ()
-                        {
+                        onTap: () {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => SignUp(),
-                              ));
+                            context,
+                            MaterialPageRoute(builder: (context) => SignUp()),
+                          );
                         },
                         child: const Text(
                           "Sign up",

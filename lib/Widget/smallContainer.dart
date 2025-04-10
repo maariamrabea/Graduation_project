@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../ExtraScreen/beginningScan.dart';
 import '../fontstyle.dart';
-import '../screen buttonbar/Scan screen.dart';
 
 class SmallContainer extends StatelessWidget {
   const SmallContainer({super.key});
@@ -37,7 +36,10 @@ class SmallContainer extends StatelessWidget {
                 minimumSize: Size(0, 0),
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
-              child: Text("scan now", style: AppTextStyles.Scan3),
+              child: Text(
+                "scan now",
+                style: AppTextStyles.f14.copyWith(color: Colors.white),
+              ),
             ),
             Icon(Icons.arrow_forward, color: Colors.white),
           ],

@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:graduationproject/fontstyle.dart';
 import 'package:graduationproject/logic/buildDots.dart';
-import 'package:graduationproject/onpording/three.dart';
+import 'package:graduationproject/onpording/Second_Screen.dart';
 import 'package:graduationproject/registration/afterscreen.dart';
 
-class Screen2 extends StatelessWidget {
-  final int currentPage;
+class Frist_Screen extends StatefulWidget {
+  const Frist_Screen({super.key});
 
-  const Screen2({required this.currentPage});
+  @override
+  State<Frist_Screen> createState() => _Frist_ScreenState();
+}
+
+class _Frist_ScreenState extends State<Frist_Screen> {
+  final int _currentPage = 0;
 
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+
     return (Scaffold(
       backgroundColor: const Color(0xFF577C8E),
       body: Stack(
@@ -42,17 +48,17 @@ class Screen2 extends StatelessWidget {
           Positioned(
             top: screenHeight * (538 / screenHeight),
             left: screenWidth * (170 / screenWidth),
-            child: buildDots(currentPage),
+            child: buildDots(_currentPage),
           ),
           Positioned(
-              top: screenHeight * (574 / screenHeight),
-              left: screenWidth * (55 / screenWidth),
-              child: Text(
-                  "Track your mood and \n   reflect on your day",
-                  style:AppTextStyles.headline3)),
+            top: screenHeight * (574 / screenHeight),
+            left: screenWidth * (45 / screenWidth),
+            child: Text(
+              "Track your mood and \n   reflect on your day",
+                style:AppTextStyles.f24.copyWith(color: Colors.white))),
           Positioned(
             top: screenHeight * (686 / screenHeight),
-            left: screenWidth * (156 / screenWidth),
+            left: screenWidth * (162 / screenWidth),
             child: Container(
                 width: screenWidth * (62 / screenWidth),
                 height: screenWidth * (62 / screenWidth),
@@ -67,7 +73,7 @@ class Screen2 extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const Screen3(currentPage: 2)),
+                          builder: (context) => const Second_Screen(currentPage: 1)),
                     );
                   },
                 )),

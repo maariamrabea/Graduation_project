@@ -1,10 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:graduationproject/fontstyle.dart';
 
 import '../Screenappbar/chatpot.dart';
 import 'con_Icon.dart';
-import 'homeImage.dart';
 
 class HomeAppBar extends StatelessWidget {
   const HomeAppBar({super.key});
@@ -17,36 +15,37 @@ class HomeAppBar extends StatelessWidget {
       width: screenWidth * (380 / screenWidth),
       height: screenHeight * (60 / screenHeight),
       child: Row(
-crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
-          Container(
-            child: Image.asset("images/Ellipse 1.png"),
-          ),
-          SizedBox(width: 10,),
+          Container(child: Image.asset("images/Ellipse 1.png")),
+          SizedBox(width: 10),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Hello", style: AppTextStyles.homebar),
-              Text("Mariam", style: AppTextStyles.name),
+              Text("Hello", style: AppTextStyles.f14.copyWith(fontSize: 16)),
+              Text("Mariam", style: AppTextStyles.f18.copyWith(fontWeight: FontWeight.w500)),
             ],
           ),
           SizedBox(width: 130),
 
           SmallImageContainer(
             image: AssetImage("images/Chatbot.png"),
-            onTap: ()    {
+            onTap: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Chatbot(),
-                  ));
+                context,
+                MaterialPageRoute(builder: (context) => ChatBotScreen()),
+              );
             },
           ),
-          SizedBox(width: 15,),
+          SizedBox(width: 15),
           SmallImageContainer(
             image: AssetImage("images/notification.png"),
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ChatBotScreen()),
+              );
+            },
           ),
         ],
       ),

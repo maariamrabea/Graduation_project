@@ -1,8 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:graduationproject/Widget/ElevatedButton.dart';
-import 'package:graduationproject/appbar.dart';
+import 'package:graduationproject/BottomBar.dart';
 import 'package:graduationproject/logic/buildTextField.dart';
 import 'package:graduationproject/registration/login.dart';
 
@@ -41,15 +39,9 @@ class SignUp extends StatelessWidget {
                   SizedBox(height: 20),
                   Padding(
                     padding: EdgeInsets.all(15),
-                    child: Text(
-                      "Sign Up",
-                      style: GoogleFonts.poppins(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
+                    child: Text("Sign Up", style: AppTextStyles.f24),
                   ),
+
                   const SizedBox(height: 10),
                   buildTextField(hint: "Full Name"),
                   const SizedBox(height: 12),
@@ -59,7 +51,7 @@ class SignUp extends StatelessWidget {
                   const SizedBox(height: 8),
                   buildTextField(hint: "Confirm Password", isPassword: true),
                   const SizedBox(height: 50),
-                  elevatedButton(
+                  Elevated_Button(
                     text: 'Sign Up',
                     onPressed: () {
                       Navigator.push(
@@ -74,7 +66,8 @@ class SignUp extends StatelessWidget {
                     children: [
                       Text(
                         "Already have an account?",
-                        style:AppTextStyles.headline2),
+                        style: AppTextStyles.f14,
+                      ),
 
                       GestureDetector(
                         onTap: () {

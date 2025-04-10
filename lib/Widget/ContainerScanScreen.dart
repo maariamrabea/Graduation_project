@@ -24,10 +24,16 @@ class ContainerScanScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Skin Scan", style: AppTextStyles.Scan),
+              Text(
+                "Skin Scan",
+                style: AppTextStyles.f24.copyWith(color: Colors.white),
+              ),
               Text(
                 "Check your skin health\n with us.",
-                style: AppTextStyles.Scan2,
+                style: AppTextStyles.f14.copyWith(
+                  fontSize: 13,
+                  color: Colors.white,
+                ),
               ),
               SmallContainer(),
               SizedBox(height: 5),
@@ -36,11 +42,10 @@ class ContainerScanScreen extends StatelessWidget {
           Stack(
             alignment: Alignment.center,
             children: [
-              Image.asset("images/Blob 1.png",width: 130,height: 130,),
-              Image.asset("images/Group.png", width: 130,height: 130,),
+              Image.asset("images/Blob 1.png", width: 130, height: 130),
+              Image.asset("images/Group.png", width: 130, height: 130),
             ],
-          )
-
+          ),
         ],
       ),
     );

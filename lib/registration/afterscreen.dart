@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:graduationproject/Widget/ElevatedButton.dart';
 import 'package:graduationproject/registration/login.dart';
@@ -17,16 +16,19 @@ class AfterScreen extends StatelessWidget {
       body: Stack(
         children: [
           Positioned.fill(
-            child: Image.asset(
-              "images/img.png",
-              fit: BoxFit.cover,
-            ),
+            child: Image.asset("images/img.png", fit: BoxFit.cover),
           ),
           Positioned(
             top: screenHeight * 0.73,
-            left: screenWidth * (75 / screenWidth),
-            child: Text("Let’s join with us!",
-                style:AppTextStyles.headline4)),
+            left: screenWidth * (90 / screenWidth),
+            child: Text(
+              "Let’s join with us!",
+              style: AppTextStyles.f24.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
 
           Positioned(
             top: screenHeight * 0.8,
@@ -34,14 +36,12 @@ class AfterScreen extends StatelessWidget {
             right: screenWidth * 0.1,
             child: Column(
               children: [
-                elevatedButton(
+                Elevated_Button(
                   text: 'Sign Up',
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) =>const SignUp(),
-                      ),
+                      MaterialPageRoute(builder: (context) => const SignUp()),
                     );
                   },
                 ),
@@ -62,17 +62,16 @@ class AfterScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const Text(
+                  child: Text(
                     "Login",
-                    style: TextStyle(
-                      color: Color(0xFF577C8E),
-                      fontSize: 18,
+                    style: AppTextStyles.f18.copyWith(
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
               ],
             ),
-    ),
+          ),
         ],
       ),
     );

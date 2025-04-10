@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:graduationproject/fontstyle.dart';
 import 'package:graduationproject/screen%20buttonbar/Chatscreen.dart';
 import 'package:graduationproject/screen%20buttonbar/HomeScreen.dart';
-import 'package:graduationproject/screen%20buttonbar/Scan%20screen.dart';
 import 'package:graduationproject/screen%20buttonbar/doctor%20Screen.dart';
 import 'package:graduationproject/screen%20buttonbar/profile%20screen.dart';
 
@@ -25,6 +24,7 @@ class _BottomBarState extends State<BottomBar> {
     ChatScreen(),
     ProfileScreen(),
   ];
+//C:\Users\rabea\Downloads\jdk-23.0.2\bin\keytool
 
   final List<String> icons = [
     "images/home.png",
@@ -46,8 +46,8 @@ class _BottomBarState extends State<BottomBar> {
           });
         },
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: ColorsApp.color1, // اللون عند التحديد
-        unselectedItemColor: Colors.grey, // اللون عند عدم التحديد
+        selectedItemColor: ColorsApp.color1,
+        unselectedItemColor: Colors.grey,
         items: List.generate(icons.length, (index) {
           return BottomNavigationBarItem(
             icon: ColorFiltered(

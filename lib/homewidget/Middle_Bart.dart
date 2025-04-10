@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:graduationproject/fontstyle.dart';
 
 import '../Widget/time.dart';
+import 'endpart.dart';
 
 class MiddleBart extends StatelessWidget {
   const MiddleBart({super.key});
@@ -12,8 +13,8 @@ class MiddleBart extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return Container(
-      height: screenHeight * (400 / screenHeight),
-      width: screenWidth * (386 / screenWidth),
+      height: screenHeight * (227 / screenHeight),
+      width: double.infinity,
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -33,13 +34,9 @@ class MiddleBart extends StatelessWidget {
                 onPressed: () {},
                 child: Text(
                   "See all",
-                  style: GoogleFonts.poppins(
+                  style: AppTextStyles.f18.copyWith(
                     fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                    color:
-                        ColorsApp
-                            .color1, // Replace ColorsApp.color1 with a default color
-                  ),
+                  ), // Replace ColorsApp.color1 with a default color
                 ),
               ),
             ],
@@ -47,7 +44,7 @@ class MiddleBart extends StatelessWidget {
           const SizedBox(height: 16), // Adds spacing between elements
           Container(
             height: 131,
-            width: 343,
+            width: 355,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),
@@ -65,14 +62,16 @@ class MiddleBart extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Dr. Ahmed", style: AppTextStyles.namedoc),
+                          Text(
+                            "Dr. Ahmed",
+                            style: AppTextStyles.f16.copyWith(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
                           Text(
                             "Dermatologist",
-                            style: GoogleFonts.poppins(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.grey,
-                            ),
+                            style: AppTextStyles.f14.copyWith(fontSize: 12),
                           ),
                         ],
                       ),
@@ -84,9 +83,7 @@ class MiddleBart extends StatelessWidget {
                           height: 38,
                           decoration: BoxDecoration(
                             color: ColorsApp.color1,
-                            border: Border.all(
-                              color: Colors.transparent,
-                            ),
+                            border: Border.all(color: Colors.transparent),
                             borderRadius: BorderRadius.circular(20),
                             image: DecorationImage(
                               image: AssetImage("images/messages-3.png"),
@@ -98,12 +95,13 @@ class MiddleBart extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 15,),
+                  SizedBox(height: 15),
                   Time(appointmentDate: DateTime(2025, 2, 2, 9, 0)),
                 ],
               ),
             ),
           ),
+
         ],
       ),
     );

@@ -1,8 +1,11 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:graduationproject/fontstyle.dart';
+import 'package:graduationproject/screen%20buttonbar/HomeScreen.dart';
+
 import '../Widget/ElevatedButton.dart';
+import '../Widget/arrow_back.dart';
+import '../BottomBar.dart';
 import '../screen buttonbar/Scan screen.dart';
 
 class BeginningScan extends StatelessWidget {
@@ -14,8 +17,17 @@ class BeginningScan extends StatelessWidget {
     double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
+        leading: CustomIconButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => BottomBar()),
+            );
+          },
+          color: Colors.black,
+        ),
         backgroundColor: Colors.white,
-        title: Text("Scan", style: AppTextStyles.headline1),
+        title: Text("Scan", style: AppTextStyles.f24),
         centerTitle: true,
       ),
       body: Stack(
@@ -37,6 +49,7 @@ class BeginningScan extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
 
                   children: [
+
                     SizedBox(height: 30),
                     Image.asset("images/Group 1000003101.png"),
                     SizedBox(height: 25),
@@ -44,15 +57,14 @@ class BeginningScan extends StatelessWidget {
                       children: [
                         Text(
                           "Skin Scan",
-                          style: GoogleFonts.poppins(
+                          style: AppTextStyles.f18.copyWith(
                             fontSize: 22,
                             fontWeight: FontWeight.w500,
-                            color: ColorsApp.color1,
                           ),
                         ),
                         Text(
                           "Detect your skin disease",
-                          style: AppTextStyles.homebar,
+                          style: AppTextStyles.f14,
                         ),
                         SizedBox(height: 20),
                       ],
@@ -68,7 +80,7 @@ class BeginningScan extends StatelessWidget {
             child: Container(
               width: screenWidth * (271 / screenWidth),
               height: screenHeight * (48 / screenHeight),
-              child: elevatedButton(
+              child: Elevated_Button(
                 text: "Scan Now",
                 onPressed: () {
                   Navigator.push(

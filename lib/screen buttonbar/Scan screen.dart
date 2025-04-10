@@ -26,7 +26,6 @@ class _SkinScanScreenState extends State<SkinScanScreen> {
     super.initState();
     _initializeCamera();
   }
-
   Future<void> _initializeCamera() async {
     _cameras = await availableCameras();
     _cameraController = CameraController(_cameras![0], ResolutionPreset.high);
@@ -37,7 +36,6 @@ class _SkinScanScreenState extends State<SkinScanScreen> {
       _imageFile = null;
     });
   }
-
   Future<void> _captureImage() async {
     if (_cameraController == null || !_cameraController!.value.isInitialized) {
       return;
@@ -49,7 +47,6 @@ class _SkinScanScreenState extends State<SkinScanScreen> {
       print("Error taking photo: $e");
     }
   }
-
   Future<void> _pickImageFromGallery() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
