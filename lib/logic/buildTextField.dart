@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-Widget buildTextField({required String hint, bool isPassword = false}) {
+Widget buildTextField({required String hint,required Controller ,required bool ispassword}) {
   return TextField(
-    obscureText: isPassword,
+    controller: Controller,
+    obscureText: ispassword,
     decoration: InputDecoration(
       hintText: hint,
       border: OutlineInputBorder(

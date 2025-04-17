@@ -1,17 +1,86 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:graduationproject/Widget/ElevatedButton.dart';
-import 'package:graduationproject/Widget/arrow_back.dart';
 import 'package:graduationproject/BottomBar.dart';
+import 'package:graduationproject/Widget/ElevatedButton.dart';
 import 'package:graduationproject/fontstyle.dart';
 import 'package:graduationproject/logic/_buildSocialButton.dart';
 import 'package:graduationproject/logic/buildTextField.dart';
 import 'package:graduationproject/registration/sign%20up.dart';
-
-import '../onpording/Frist_Screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../dio_helper.dart';
 import 'forgetpass.dart';
 
 class Login extends StatelessWidget {
-  const Login({super.key});
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  Login({super.key});
+
+  Future<void> login(BuildContext context) async {
+    String email = emailController.text.trim();
+    String password = passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
+      showErrorDialog(context, "Please enter your email and password.");
+      return;
+    }
+
+    String apiUrl = "https://580d-197-35-65-10.ngrok-free.app/api/users/login/";
+
+    try {
+      Response response = await DioHelper.dio.post(
+        apiUrl,
+        data: {
+          "email": email,
+          "password": password,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        String accessToken = response.data["access"];
+        String refreshToken = response.data["refresh"];
+
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString("access_token", accessToken);
+        await prefs.setString("refresh_token", refreshToken);
+
+        DioHelper.dio.options.headers["Authorization"] = "Bearer $accessToken";
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => BottomBar()),
+        );
+      } else {
+        showErrorDialog(context, "Login failed. Please try again.");
+      }
+    } catch (e) {
+      if (e is DioError) {
+        String errorMessage = "Login failed.";
+        if (e.response != null && e.response?.data != null) {
+          errorMessage = e.response?.data.toString() ?? errorMessage;
+        }
+        showErrorDialog(context, errorMessage);
+      } else {
+        showErrorDialog(context, "An unexpected error occurred.");
+      }
+    }
+  }
+
+  void showErrorDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Error"),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("OK"),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,21 +92,8 @@ class Login extends StatelessWidget {
       body: Stack(
         children: [
           Positioned(
-            top: screenHeight * (45 / screenHeight),
-            left: screenWidth * (8 / screenWidth),
-            child: CustomIconButton(
-              color: Colors.white,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Frist_Screen()),
-                );
-              },
-            ),
-          ),
-          Positioned(
             top: screenHeight * 0.148,
-            left: screenWidth * (20 / screenWidth),
+            left: screenWidth * 0.05,
             child: Text(
               "Login to your account",
               style: AppTextStyles.f24.copyWith(
@@ -65,9 +121,17 @@ class Login extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 50),
-                  buildTextField(hint: "Email"),
+                  buildTextField(
+                    hint: "Email",
+                    Controller: emailController,
+                    ispassword: false,
+                  ),
                   const SizedBox(height: 12),
-                  buildTextField(hint: "Password", isPassword: true),
+                  buildTextField(
+                    hint: "Password",
+                    Controller: passwordController,
+                    ispassword: true,
+                  ),
                   const SizedBox(height: 8),
                   Align(
                     alignment: Alignment.centerRight,
@@ -89,12 +153,7 @@ class Login extends StatelessWidget {
                   ),
                   const SizedBox(height: 50),
                   Elevated_Button(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => BottomBar()),
-                      );
-                    },
+                    onPressed: () => login(context),
                     text: 'Login',
                   ),
                   const SizedBox(height: 20),
@@ -141,3 +200,4 @@ class Login extends StatelessWidget {
     );
   }
 }
+

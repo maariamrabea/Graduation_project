@@ -3,7 +3,7 @@ import 'package:graduationproject/fontstyle.dart';
 
 class Elevated_Button extends StatelessWidget {
   final String text;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   const Elevated_Button({
     super.key,
