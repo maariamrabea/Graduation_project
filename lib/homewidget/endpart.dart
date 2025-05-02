@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../Widget/HistoryCases.dart';
 import '../Widget/Top_doc.dart';
 import '../fontstyle.dart';
 import '../screen buttonbar/doctor Screen.dart';
@@ -23,7 +24,7 @@ class EndBart extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Top doctors",
+                  "Last cases",
                   style: AppTextStyles.f16.copyWith(
                     fontWeight: FontWeight.w500,
                     color: Colors.black,
@@ -43,10 +44,20 @@ class EndBart extends StatelessWidget {
                 ),
               ],
             ),
-            Top_Doctor(),
+            Container(
+              height:(screenHeight* 266)/screenHeight,
+              width:screenWidth,
+
+              child:
+            HistoryCases(),
+
+            ),
+
+           // Top_Doctor(),
           ],
         ),
       ),
     );
   }
 }
+

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:graduationproject/fontstyle.dart';
-import 'package:graduationproject/screen%20buttonbar/Chatscreen.dart';
+import 'package:graduationproject/screen%20buttonbar/HistoryScreen.dart';
 import 'package:graduationproject/screen%20buttonbar/HomeScreen.dart';
 import 'package:graduationproject/screen%20buttonbar/doctor%20Screen.dart';
 import 'package:graduationproject/screen%20buttonbar/profile%20screen.dart';
@@ -21,16 +21,16 @@ class _BottomBarState extends State<BottomBar> {
     HomeScreen(),
     DoctorScreen(),
     BeginningScan(),
-    ChatScreen(),
+    HistoryScreen(),
     ProfileScreen(),
   ];
-//C:\Users\rabea\Downloads\jdk-23.0.2\bin\keytool
+
 
   final List<String> icons = [
     "images/home.png",
     "images/doctor.png",
     "images/scan.png",
-    "images/chat.png",
+    "images/Group.png",
     "images/profile.png",
   ];
 
@@ -61,7 +61,7 @@ class _BottomBarState extends State<BottomBar> {
                 height: 25,
               ),
             ),
-            label: ["Home", "Doctor", "Scan", "Chat", "Profile"][index],
+            label: ["Home", "Doctor", "Scan", "History", "Profile"][index],
           );
         }),
       ),

@@ -38,7 +38,7 @@ class Second_Screen extends StatelessWidget {
           Positioned(
               top: screenHeight * (90 / screenHeight),
               left: screenWidth * (10 / screenWidth),
-              child: Image.asset("images/Background.png")),
+              child: Image.asset("images/Background (1).png")),
           Positioned(
             top: screenHeight * (538 / screenHeight),
             left: screenWidth * (170 / screenWidth),

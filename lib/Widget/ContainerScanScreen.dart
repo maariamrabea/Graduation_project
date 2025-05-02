@@ -42,8 +42,8 @@ class ContainerScanScreen extends StatelessWidget {
           Stack(
             alignment: Alignment.center,
             children: [
-              Image.asset("images/Blob 1.png", width: 130, height: 130),
-              Image.asset("images/Group.png", width: 130, height: 130),
+            //  Image.asset("images/Blob 1.png", width: 130, height: 130),
+              Image.asset("images/Group 1000003101.png", width: 130, height: 130),
             ],
           ),
         ],

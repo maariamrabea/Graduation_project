@@ -16,7 +16,7 @@ class AfterScreen extends StatelessWidget {
       body: Stack(
         children: [
           Positioned.fill(
-            child: Image.asset("images/img.png", fit: BoxFit.cover),
+            child: Image.asset("images/c74cca2d-2e12-4a3b-a6c3-334cefdfe267.jpg", fit: BoxFit.cover),
           ),
           Positioned(
             top: screenHeight * 0.73,

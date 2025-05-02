@@ -15,7 +15,6 @@ class UpperPart extends StatelessWidget {
         width: screenWidth * (386 / screenWidth),
         decoration: BoxDecoration(
           color: Colors.white,
-
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(16),
             bottomRight: Radius.circular(16),

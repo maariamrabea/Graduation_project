@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../ApiConstants.dart';
 import '../BottomBar.dart';
 import '../Widget/ElevatedButton.dart';
 import '../dio_helper.dart';
@@ -63,7 +64,9 @@ class _SignUpState extends State<SignUp> {
       return;
     }
 
-    String apiUrl = "https://580d-197-35-65-10.ngrok-free.app/api/users/signup/";
+    String apiUrl = "https://3baf-197-35-170-25.ngrok-free.app/api/users/signup/";
+
+        ApiConstants.signup;
 
     try {
       Response response = await DioHelper.dio.post(

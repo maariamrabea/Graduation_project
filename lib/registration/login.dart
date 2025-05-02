@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:graduationproject/BottomBar.dart';
 import 'package:graduationproject/Widget/ElevatedButton.dart';
 import 'package:graduationproject/fontstyle.dart';
-import 'package:graduationproject/logic/_buildSocialButton.dart';
 import 'package:graduationproject/logic/buildTextField.dart';
 import 'package:graduationproject/registration/sign%20up.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../ApiConstants.dart';
 import '../dio_helper.dart';
+import '../logic/GoogleButton.dart';
+import '../logic/facebookButton.dart';
 import 'forgetpass.dart';
 
 class Login extends StatelessWidget {
@@ -25,15 +28,13 @@ class Login extends StatelessWidget {
       return;
     }
 
-    String apiUrl = "https://580d-197-35-65-10.ngrok-free.app/api/users/login/";
+    String apiUrl = "https://3baf-197-35-170-25.ngrok-free.app/api/users/login/";
+        //ApiConstants.login;
 
     try {
       Response response = await DioHelper.dio.post(
         apiUrl,
-        data: {
-          "email": email,
-          "password": password,
-        },
+        data: {"email": email, "password": password},
       );
 
       if (response.statusCode == 200) {
@@ -69,16 +70,17 @@ class Login extends StatelessWidget {
   void showErrorDialog(BuildContext context, String message) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text("Error"),
-        content: Text(message),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text("OK"),
+      builder:
+          (context) => AlertDialog(
+            title: const Text("Error"),
+            content: Text(message),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text("OK"),
+              ),
+            ],
           ),
-        ],
-      ),
     );
   }
 
@@ -164,9 +166,9 @@ class Login extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      buildSocialButton("images/Vector.png", context),
+                      GoogleButton(),
                       const SizedBox(width: 30),
-                      buildSocialButton("images/facebook.png", context),
+                      facebookButton(),
                     ],
                   ),
                   const SizedBox(height: 50),
@@ -200,4 +202,3 @@ class Login extends StatelessWidget {
     );
   }
 }
-

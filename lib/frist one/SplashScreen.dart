@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../Widget/ElevatedButton.dart';
 import '../onpording/Frist_Screen.dart';
+import '../registration/afterscreen.dart';
 
 class Splashscreen extends StatelessWidget {
   const Splashscreen({super.key});
@@ -12,22 +12,18 @@ class Splashscreen extends StatelessWidget {
     double screenHeight = MediaQuery.of(context).size.height;
 
     return (Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
+      backgroundColor: Color(0xFF577C8E),
+      body: Center(child:GestureDetector(
+        onTap: () {
+          print("Image clicked!");
 
-          Image.asset("images/Background.png"),
-
-
-
-    Elevated_Button(text: "Start", onPressed: () {
-    Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => Frist_Screen()),
-    );})
-
-        ],
-      ),
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Frist_Screen()),
+          );
+        },
+        child: Image.asset('images/photo_2025-04-21_14-45-23 1.png'),
+      )),
     ));
   }
 }
