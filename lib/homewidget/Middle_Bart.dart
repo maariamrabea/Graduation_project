@@ -1,124 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:graduationproject/fontstyle.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Widget/time.dart';
 
-// class MiddleBart extends StatelessWidget {
-//   const MiddleBart({super.key});
+class MiddleBart extends StatefulWidget {
+  const MiddleBart({super.key});
+
+  @override
+  _MiddleBartState createState() => _MiddleBartState();
+}
+
+// class _MiddleBartState extends State<MiddleBart> {
+//   String? doctorName;
+//   String? doctorSpecialty;
+//   String? doctorImage;
 //
 //   @override
-//   Widget build(BuildContext context) {
-//     double screenWidth = MediaQuery.of(context).size.width;
-//     double screenHeight = MediaQuery.of(context).size.height;
-//     return Container(
-//       height: screenHeight * (227 / screenHeight),
-//       width: double.infinity,
-//       padding: const EdgeInsets.all(16),
-//       child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           Row(
-//             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//             children: [
-//               Text(
-//                 "Upcoming appointments",
-//                 style: GoogleFonts.poppins(
-//                   fontSize: 16,
-//                   fontWeight: FontWeight.w600,
-//                   color: Colors.black,
-//                 ),
-//               ),
-//               TextButton(
-//                 onPressed: () {},
-//                 child: Text(
-//                   "See all",
-//                   style: AppTextStyles.f18.copyWith(
-//                     fontSize: 12,
-//                   ), // Replace ColorsApp.color1 with a default color
-//                 ),
-//               ),
-//             ],
-//           ),
-//           const SizedBox(height: 16), // Adds spacing between elements
-//           Container(
-//             height: 131,
-//             width: 355,
-//             decoration: BoxDecoration(
-//               color: Colors.white,
-//               borderRadius: BorderRadius.circular(12),
-//             ),
-//             child: Padding(
-//               padding: EdgeInsets.all(15),
-//               child: Column(
-//                 children: [
-//                   Row(
-//                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//
-//                     children: [
-//                       Container(child: Image.asset("images/Ellipse 1.png")),
-//                       // SizedBox(width: 5),
-//                       Column(
-//                         crossAxisAlignment: CrossAxisAlignment.start,
-//                         children: [
-//                           Text(
-//                             "Dr. Ahmed",
-//                             style: AppTextStyles.f16.copyWith(
-//                               color: Colors.black,
-//                               fontWeight: FontWeight.w500,
-//                             ),
-//                           ),
-//                           Text(
-//                             "Dermatologist",
-//                             style: AppTextStyles.f14.copyWith(fontSize: 12),
-//                           ),
-//                         ],
-//                       ),
-//                       SizedBox(width: 90),
-//                       GestureDetector(
-//                         onTap: () {},
-//                         child: Container(
-//                           width: 38,
-//                           height: 38,
-//                           decoration: BoxDecoration(
-//                             color: ColorsApp.color1,
-//                             border: Border.all(color: Colors.transparent),
-//                             borderRadius: BorderRadius.circular(20),
-//                             image: DecorationImage(
-//                               image: AssetImage("images/messages-3.png"),
-//                               scale: 0.9,
-//                               //fit: BoxFit.none,
-//                             ),
-//                           ),
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                   SizedBox(height: 15),
-//                   Time(appointmentDate: DateTime(2025, 2, 2, 9, 0)),
-//                 ],
-//               ),
-//             ),
-//           ),
-//
-//         ],
-//       ),
-//     );
+//   void initState() {
+//     super.initState();
+//     loadDoctorData();
 //   }
-// }
-// class MiddleBart extends StatelessWidget {
-//   final String doctorName;
-//   final String doctorSpecialty;
-//   final String doctorImage;
-//   final DateTime appointmentDate;
 //
-//   const MiddleBart({
-//     super.key,
-//     required this.doctorName,
-//     required this.doctorSpecialty,
-//     required this.doctorImage,
-//     required this.appointmentDate,
-//   });
+//   void loadDoctorData() async {
+//     final prefs = await SharedPreferences.getInstance();
+//     setState(() {
+//       doctorName = prefs.getString('doctor_name') ?? "No doctor yet";
+//       doctorSpecialty = prefs.getString('doctor_specialty') ?? "";
+//       doctorImage = prefs.getString('doctor_image');
+//     });
+//   }
 //
 //   @override
 //   Widget build(BuildContext context) {
@@ -144,10 +56,7 @@ import '../Widget/time.dart';
 //               ),
 //               TextButton(
 //                 onPressed: () {},
-//                 child: Text(
-//                   "See all",
-//                   style: TextStyle(fontSize: 12, color: Colors.blue),
-//                 ),
+//                 child: Text("See all"),
 //               ),
 //             ],
 //           ),
@@ -164,26 +73,46 @@ import '../Widget/time.dart';
 //               child: Column(
 //                 children: [
 //                   Row(
+//                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
 //                     children: [
-//                       Image.asset(doctorImage, height: 50, width: 50),
-//                       const SizedBox(width: 10),
+//                       doctorImage != null
+//                           ? Image.asset(doctorImage!, width: 50, height: 50)
+//                           : Icon(Icons.person, size: 50),
 //                       Column(
 //                         crossAxisAlignment: CrossAxisAlignment.start,
 //                         children: [
 //                           Text(
-//                             doctorName,
-//                             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+//                             doctorName ?? '',
+//                             style: AppTextStyles.f16.copyWith(
+//                               color: Colors.black,
+//                               fontWeight: FontWeight.w500,
+//                             ),
 //                           ),
 //                           Text(
-//                             doctorSpecialty,
-//                             style: TextStyle(fontSize: 12),
+//                             doctorSpecialty ?? '',
+//                             style: AppTextStyles.f14.copyWith(fontSize: 12),
 //                           ),
 //                         ],
 //                       ),
+//                       SizedBox(width: 90),
+//                       GestureDetector(
+//                         onTap: () {},
+//                         child: Container(
+//                           width: 38,
+//                           height: 38,
+//                           decoration: BoxDecoration(
+//                             color: ColorsApp.color1,
+//                             borderRadius: BorderRadius.circular(20),
+//                             image: DecorationImage(
+//                               image: AssetImage("images/messages-3.png"),
+//                             ),
+//                           ),
+//                         ),
+//                       ),
 //                     ],
 //                   ),
-//                   const SizedBox(height: 15),
-//                   Time(appointmentDate: appointmentDate),
+//                   SizedBox(height: 15),
+//                   Time(appointmentDate: DateTime(2025, 2, 2, 9, 0)),
 //                 ],
 //               ),
 //             ),
@@ -193,19 +122,11 @@ import '../Widget/time.dart';
 //     );
 //   }
 // }
-import 'package:shared_preferences/shared_preferences.dart';
-
-class MiddleBart extends StatefulWidget {
-  const MiddleBart({super.key});
-
-  @override
-  _MiddleBartState createState() => _MiddleBartState();
-}
-
 class _MiddleBartState extends State<MiddleBart> {
   String? doctorName;
   String? doctorSpecialty;
   String? doctorImage;
+  String? appointmentDateString;
 
   @override
   void initState() {
@@ -219,12 +140,18 @@ class _MiddleBartState extends State<MiddleBart> {
       doctorName = prefs.getString('doctor_name') ?? "No doctor yet";
       doctorSpecialty = prefs.getString('doctor_specialty') ?? "";
       doctorImage = prefs.getString('doctor_image');
+      appointmentDateString = prefs.getString('appointment_date');
     });
   }
 
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
+
+    DateTime? appointmentDate =
+        appointmentDateString != null
+            ? DateTime.tryParse(appointmentDateString!)
+            : null;
 
     return Container(
       height: screenHeight * (227 / screenHeight),
@@ -244,10 +171,7 @@ class _MiddleBartState extends State<MiddleBart> {
                   color: Colors.black,
                 ),
               ),
-              TextButton(
-                onPressed: () {},
-                child: Text("See all"),
-              ),
+              TextButton(onPressed: () {}, child: const Text("See all")),
             ],
           ),
           const SizedBox(height: 16),
@@ -259,7 +183,7 @@ class _MiddleBartState extends State<MiddleBart> {
               borderRadius: BorderRadius.circular(12),
             ),
             child: Padding(
-              padding: EdgeInsets.all(15),
+              padding: const EdgeInsets.all(15),
               child: Column(
                 children: [
                   Row(
@@ -267,7 +191,7 @@ class _MiddleBartState extends State<MiddleBart> {
                     children: [
                       doctorImage != null
                           ? Image.asset(doctorImage!, width: 50, height: 50)
-                          : Icon(Icons.person, size: 50),
+                          : const Icon(Icons.person, size: 50),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -284,7 +208,7 @@ class _MiddleBartState extends State<MiddleBart> {
                           ),
                         ],
                       ),
-                      SizedBox(width: 90),
+                      const SizedBox(width: 90),
                       GestureDetector(
                         onTap: () {},
                         child: Container(
@@ -293,7 +217,7 @@ class _MiddleBartState extends State<MiddleBart> {
                           decoration: BoxDecoration(
                             color: ColorsApp.color1,
                             borderRadius: BorderRadius.circular(20),
-                            image: DecorationImage(
+                            image: const DecorationImage(
                               image: AssetImage("images/messages-3.png"),
                             ),
                           ),
@@ -301,8 +225,10 @@ class _MiddleBartState extends State<MiddleBart> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 15),
-                  Time(appointmentDate: DateTime(2025, 2, 2, 9, 0)),
+                  const SizedBox(height: 15),
+                  appointmentDate != null
+                      ? Time(appointmentDate: appointmentDate)
+                      : const Text("No appointment selected"),
                 ],
               ),
             ),

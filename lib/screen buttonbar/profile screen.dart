@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-
-import '../fontstyle.dart';
-
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
@@ -41,9 +38,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ), // استبدل بعنوان URL الخاص بصورة الملف الشخصي
                     ),
                     const SizedBox(height: 8),
-                    Text(
+                    const Text(
                       'Mariam',
-                      style: AppTextStyles.f18.copyWith(color: Colors.black),
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.normal,
+                      ),
                     ),
                     const SizedBox(height: 10),
 
@@ -117,6 +117,54 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ],
           ),
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Image.asset(
+              'assets/icons/home.png',
+              width: 24,
+              height: 24,
+              color: Colors.grey,
+            ),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Image.asset(
+              'assets/icons/doctor-appointment (1).png',
+              width: 24,
+              height: 24,
+              color: Colors.grey,
+            ),
+            label: 'Doctors',
+          ),
+
+          BottomNavigationBarItem(
+            icon: Image.asset(
+              'assets/icons/qr-scan.png',
+              width: 24,
+              height: 24,
+              color: Colors.grey,
+            ),
+            label: 'Scan',
+          ),
+          BottomNavigationBarItem(
+            label: 'chats',
+            icon: Image.asset(
+              'assets/icons/chat.png',
+              width: 24,
+              height: 24,
+              color: Colors.grey,
+            ),
+          ),
+          const BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+        currentIndex: 4, // تحديد العنصر النشط في شريط التنقل
+        selectedItemColor: Colors.blue, // لون العنصر النشط
+        unselectedItemColor: Colors.grey, // لون العناصر غير النشطة
       ),
     );
   }

@@ -3,7 +3,6 @@ import 'package:graduationproject/fontstyle.dart';
 
 import '../ExtraScreen/DoctorDetailScreen.dart';
 import '../Widget/RatingExperienceWidget.dart';
-import '../Widget/search_bar.dart';
 
 class DoctorScreen extends StatefulWidget {
   @override
@@ -116,9 +115,14 @@ class _DoctorScreenState extends State<DoctorScreen> {
         padding: EdgeInsets.all(10),
         child: Column(
           children: [
-            CustomSearchBar(
+            TextField(
               controller: searchController,
               onChanged: filterSearch,
+              decoration: InputDecoration(
+                labelText: 'Search Doctors',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.search),
+              ),
             ),
             SizedBox(height: 20),
             Expanded(
@@ -140,8 +144,12 @@ class _DoctorScreenState extends State<DoctorScreen> {
                                 context,
                                 MaterialPageRoute(
                                   builder:
-                                      (context) =>
-                                          DoctorDetailScreen(doctor: doctor),
+                                      (context) => DoctorDetailScreen(
+                                        doctorName: doctor["name"],
+                                        doctorImage: doctor["image"],
+                                        contact: doctor['contact'],
+                                        workingTime: doctor['workingTime'],
+                                      ),
                                 ),
                               );
                             },
@@ -168,8 +176,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
                                           Expanded(
                                             child: Text(
                                               doctor["name"],
-                                              style: AppTextStyles.f18.copyWith(fontSize: 16)
-                                              ,
+                                              style: TextStyle(fontSize: 16),
                                               softWrap: true,
                                             ),
                                           ),
@@ -184,9 +191,8 @@ class _DoctorScreenState extends State<DoctorScreen> {
                                         ],
                                       ),
                                       SizedBox(height: 20),
-                                      RatingExperienceWidget(
 
-                                      ),
+                                      RatingExperienceWidget(),
                                     ],
                                   ),
                                 ),
