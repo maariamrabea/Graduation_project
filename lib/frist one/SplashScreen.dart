@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../fontstyle.dart';
 import '../onpording/Frist_Screen.dart';
-import '../registration/afterscreen.dart';
+
+import 'package:flutter/material.dart';
 
 class Splashscreen extends StatelessWidget {
   const Splashscreen({super.key});
@@ -11,19 +13,26 @@ class Splashscreen extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    return (Scaffold(
-      backgroundColor: Color(0xFF577C8E),
-      body: Center(child:GestureDetector(
+    return Scaffold(
+      backgroundColor: ColorsApp.color1,
+      body: GestureDetector(
         onTap: () {
           print("Image clicked!");
-
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => Frist_Screen()),
           );
         },
-        child: Image.asset('images/photo_2025-04-21_14-45-23 1.png'),
-      )),
-    ));
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset('images/Skinly.png'),
+
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

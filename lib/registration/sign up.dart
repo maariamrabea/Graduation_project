@@ -1,17 +1,12 @@
-import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../ApiConstants.dart';
-import '../BottomBar.dart';
+import 'package:flutter/material.dart';
+import 'package:graduationproject/ApiConstants.dart';
+
 import '../Widget/ElevatedButton.dart';
 import '../dio_helper.dart';
 import '../fontstyle.dart';
 import '../logic/buildTextField.dart';
 import 'login.dart';
-
-import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'login.dart'; // Import the Login screen
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -25,7 +20,8 @@ class _SignUpState extends State<SignUp> {
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
 
   bool isButtonEnabled = false;
 
@@ -49,7 +45,8 @@ class _SignUpState extends State<SignUp> {
 
   void updateButtonState() {
     setState(() {
-      isButtonEnabled = nameController.text.isNotEmpty &&
+      isButtonEnabled =
+          nameController.text.isNotEmpty &&
           phoneController.text.isNotEmpty &&
           emailController.text.isNotEmpty &&
           passwordController.text.isNotEmpty &&
@@ -64,12 +61,10 @@ class _SignUpState extends State<SignUp> {
       return;
     }
 
-    String apiUrl = "https://3baf-197-35-170-25.ngrok-free.app/api/users/signup/";
-
-        ApiConstants.signup;
+    String apiUrl = ApiConstants.signup;
 
     try {
-      Response response = await DioHelper.dio.post(
+      Response response = await DioHelper.postWithoutAuthRequest(
         apiUrl,
         data: {
           "full_name": nameController.text.trim(),
@@ -81,24 +76,27 @@ class _SignUpState extends State<SignUp> {
       );
 
       if (response.statusCode == 201) {
-        // Successful signup, redirect to Login
+        // نجاح التسجيل
         showDialog(
           context: context,
-          builder: (context) => AlertDialog(
-            title: const Text("Success"),
-            content: const Text("Account created successfully! Please log in."),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => Login()),
-                  );
-                },
-                child: const Text("Go to Login"),
+          builder:
+              (context) => AlertDialog(
+                title: const Text("Success"),
+                content: const Text(
+                  "Account created successfully! Please log in.",
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => Login()),
+                      );
+                    },
+                    child: const Text("Go to Login"),
+                  ),
+                ],
               ),
-            ],
-          ),
         );
       } else {
         showErrorDialog(context, "Registration failed. Please try again.");
@@ -110,7 +108,9 @@ class _SignUpState extends State<SignUp> {
 
         if (statusCode == 400 && responseData is Map) {
           String errorMessage = responseData.values
-              .map((value) => value is List ? value.join("\n") : value.toString())
+              .map(
+                (value) => value is List ? value.join("\n") : value.toString(),
+              )
               .join("\n");
           showErrorDialog(context, errorMessage);
         } else {
@@ -203,14 +203,15 @@ class _SignUpState extends State<SignUp> {
                   const SizedBox(height: 50),
                   Elevated_Button(
                     text: 'Sign Up',
-                    onPressed: isButtonEnabled
-                        ? () => register(context)
-                        : () {
-                      showErrorDialog(
-                        context,
-                        "Please fill all the fields!",
-                      );
-                    },
+                    onPressed:
+                        isButtonEnabled
+                            ? () => register(context)
+                            : () {
+                              showErrorDialog(
+                                context,
+                                "Please fill all the fields!",
+                              );
+                            },
                   ),
                   const SizedBox(height: 30),
                   Row(

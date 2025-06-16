@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:graduationproject/fontstyle.dart';
 import 'package:graduationproject/screen%20buttonbar/HistoryScreen.dart';
@@ -21,10 +20,9 @@ class _BottomBarState extends State<BottomBar> {
     HomeScreen(),
     DoctorScreen(),
     BeginningScan(),
-    HistoryScreen(),
+    HistoryCases(),
     ProfileScreen(),
   ];
-
 
   final List<String> icons = [
     "images/home.png",
@@ -37,6 +35,7 @@ class _BottomBarState extends State<BottomBar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
@@ -52,14 +51,10 @@ class _BottomBarState extends State<BottomBar> {
           return BottomNavigationBarItem(
             icon: ColorFiltered(
               colorFilter: ColorFilter.mode(
-                _currentIndex == index ?  ColorsApp.color1: Colors.grey,
+                _currentIndex == index ? ColorsApp.color1 : Colors.grey,
                 BlendMode.srcIn,
               ),
-              child: Image.asset(
-                icons[index],
-                width: 25,
-                height: 25,
-              ),
+              child: Image.asset(icons[index], width: 25, height: 25),
             ),
             label: ["Home", "Doctor", "Scan", "History", "Profile"][index],
           );

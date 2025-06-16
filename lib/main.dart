@@ -3,6 +3,7 @@ import 'package:graduationproject/screen%20buttonbar/HomeScreen.dart';
 
 import 'BottomBar.dart';
 import 'dio_helper.dart';
+import 'fontstyle.dart';
 import 'frist one/SplashScreen.dart';
 
 void main() async {
@@ -17,8 +18,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        theme: ThemeData(
+        scaffoldBackgroundColor:Color(0xFFF5F5F5)),
       debugShowCheckedModeBanner: false,
-      home: Scaffold(body: Center(child:BottomBar ())),
+      home: Scaffold(body: Center(child:Splashscreen ())),
     );
   }
 }

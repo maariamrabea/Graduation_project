@@ -7,7 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import '../logic/ConfirmImageDialog.dart';
 import '../Widget/arrow_back.dart';
 import '../fontstyle.dart';
-import '../result/screenresult.dart';
+import '../result/scan_result.dart';
 
 class SkinScanScreen extends StatefulWidget {
   @override
@@ -70,7 +70,9 @@ class _SkinScanScreenState extends State<SkinScanScreen> {
           });
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => ScreenResult()),
+            MaterialPageRoute(
+              builder: (context) => ScanResult(imageFile: image),
+            ),
           );
         },
       ),

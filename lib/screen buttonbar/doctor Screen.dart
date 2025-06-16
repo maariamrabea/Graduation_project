@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:graduationproject/fontstyle.dart';
 
+import '../BottomBar.dart';
 import '../ExtraScreen/DoctorDetailScreen.dart';
 import '../Widget/RatingExperienceWidget.dart';
+import '../Widget/arrow_back.dart';
 
 class DoctorScreen extends StatefulWidget {
   @override
@@ -98,18 +100,21 @@ class _DoctorScreenState extends State<DoctorScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-        title: Text(
-          "Doctors",
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w500,
-            color: Colors.black,
-          ),
+        leading: CustomIconButton(
+          onPressed: () {
+            Navigator.pop(
+              context,
+            //  MaterialPageRoute(builder: (context) => BottomBar()),
+            );
+          },
+          color: Colors.black,
         ),
         backgroundColor: Colors.white,
-        elevation: 0,
+        title: Text("Doctor", style: AppTextStyles.f18.copyWith(
+          color: Colors.black,
+          fontWeight: FontWeight.w500,
+        ),),
+        centerTitle: true,
       ),
       body: Padding(
         padding: EdgeInsets.all(10),

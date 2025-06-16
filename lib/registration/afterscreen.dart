@@ -20,7 +20,7 @@ class AfterScreen extends StatelessWidget {
           ),
           Positioned(
             top: screenHeight * 0.73,
-            left: screenWidth * (90 / screenWidth),
+            left: screenWidth * (80 / screenWidth),
             child: Text(
               "Let’s join with us!",
               style: AppTextStyles.f24.copyWith(

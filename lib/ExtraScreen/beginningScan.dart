@@ -27,7 +27,10 @@ class BeginningScan extends StatelessWidget {
           color: Colors.black,
         ),
         backgroundColor: Colors.white,
-        title: Text("Scan", style: AppTextStyles.f24),
+        title: Text("Scan", style: AppTextStyles.f18.copyWith(
+    color: Colors.black,
+    fontWeight: FontWeight.w500,
+    ),),
         centerTitle: true,
       ),
       body: Stack(

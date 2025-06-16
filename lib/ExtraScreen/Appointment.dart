@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:graduationproject/fontstyle.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../screen buttonbar/HomeScreen.dart'; //بدلي الايمبورت ده بصفحة الهوم عندك
 
-import 'package:flutter/material.dart';
-import '../screen buttonbar/HomeScreen.dart'; // غير المسار لو مختلف
+import '../BottomBar.dart';
+import '../Widget/arrow_back.dart';
 
 class AppointmentScreen extends StatefulWidget {
   final String doctorName;
@@ -26,15 +25,18 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
   DateTime selectedDate = DateTime(2025, 2, 16);
 
   final List<String> times = [
-    "8:00 PM", "8:30 PM", "9:00 PM", "9:30 PM",
-    "10:00 PM", "10:30 PM", "11:00 PM",
+    "8:00 PM",
+    "8:30 PM",
+    "9:00 PM",
+    "9:30 PM",
+    "10:00 PM",
+    "10:30 PM",
+    "11:00 PM",
   ];
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery
-        .of(context)
-        .size;
+    final size = MediaQuery.of(context).size;
     final primaryColor = const Color(0xFF557C91);
     final lightGrey = Colors.black12;
 
@@ -47,7 +49,12 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
         foregroundColor: Colors.black,
         elevation: 0,
         centerTitle: true,
-        leading: const BackButton(),
+        leading: CustomIconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          color: Colors.black,
+        ),
         title: const Text(
           'Appointment',
           style: TextStyle(fontWeight: FontWeight.normal),
@@ -73,8 +80,10 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                           radius: 30,
                         ),
                         const SizedBox(width: 16),
-                        Text(widget.doctorName,
-                            style: const TextStyle(fontSize: 18)),
+                        Text(
+                          widget.doctorName,
+                          style: const TextStyle(fontSize: 18),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 16),
@@ -86,8 +95,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                           onPressed: _pickDate,
                         ),
                         Text(
-                          '${_getMonthName(selectedDate.month)}, ${selectedDate
-                              .year}',
+                          '${_getMonthName(selectedDate.month)}, ${selectedDate.year}',
                           style: const TextStyle(fontSize: 16),
                         ),
                         IconButton(
@@ -129,19 +137,27 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                                   Text(
                                     '$day',
                                     style: TextStyle(
-                                      color: isSelected ? Colors.white : Colors
-                                          .black87,
+                                      color:
+                                          isSelected
+                                              ? Colors.white
+                                              : Colors.black87,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                   Text(
-                                    _getDayName(DateTime(
-                                        selectedDate.year, selectedDate.month,
-                                        day)),
+                                    _getDayName(
+                                      DateTime(
+                                        selectedDate.year,
+                                        selectedDate.month,
+                                        day,
+                                      ),
+                                    ),
                                     style: TextStyle(
                                       fontSize: 12,
-                                      color: isSelected ? Colors.white : Colors
-                                          .black54,
+                                      color:
+                                          isSelected
+                                              ? Colors.white
+                                              : Colors.black54,
                                     ),
                                   ),
                                 ],
@@ -179,38 +195,44 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                         ),
 
                         SizedBox(width: 8),
-                        Text('Available', style: AppTextStyles.f18,),
+                        Text('Available', style: AppTextStyles.f18),
                       ],
                     ),
                     const SizedBox(height: 16),
                     Wrap(
                       spacing: 10,
                       runSpacing: 10,
-                      children: times.map((time) {
-                        bool isSelected = selectedTime == time;
-                        return GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              selectedTime = time;
-                            });
-                          },
-                          child: AnimatedContainer(
-                            duration: const Duration(milliseconds: 300),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 12),
-                            decoration: BoxDecoration(
-                              color: isSelected ? primaryColor : lightGrey,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Text(
-                              time,
-                              style: TextStyle(
-                                  color: isSelected ? Colors.white : Colors
-                                      .black87),
-                            ),
-                          ),
-                        );
-                      }).toList(),
+                      children:
+                          times.map((time) {
+                            bool isSelected = selectedTime == time;
+                            return GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  selectedTime = time;
+                                });
+                              },
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 300),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 20,
+                                  vertical: 12,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: isSelected ? primaryColor : lightGrey,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Text(
+                                  time,
+                                  style: TextStyle(
+                                    color:
+                                        isSelected
+                                            ? Colors.white
+                                            : Colors.black87,
+                                  ),
+                                ),
+                              ),
+                            );
+                          }).toList(),
                     ),
                   ],
                 ),
@@ -219,22 +241,27 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
             const Spacer(),
             SizedBox(
               width: double.infinity,
-              child: isLoading
-                  ? const Center(
-                child: CircularProgressIndicator(color: Color(0xFF557C91)),
-              )
-                  : ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: primaryColor,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                onPressed: _bookAppointment,
-                child: const Text('Book Appointment',
-                    style: TextStyle(fontSize: 18, color: Colors.white)),
-              ),
+              child:
+                  isLoading
+                      ? const Center(
+                        child: CircularProgressIndicator(
+                          color: Color(0xFF557C91),
+                        ),
+                      )
+                      : ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: primaryColor,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        onPressed: _bookAppointment,
+                        child: const Text(
+                          'Book Appointment',
+                          style: TextStyle(fontSize: 18, color: Colors.white),
+                        ),
+                      ),
             ),
           ],
         ),
@@ -263,24 +290,24 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
       // عرض رسالة تأكيد
       showDialog(
         context: context,
-        builder: (context) =>
-            AlertDialog(
+        builder:
+            (context) => AlertDialog(
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16)),
+                borderRadius: BorderRadius.circular(16),
+              ),
               contentPadding: const EdgeInsets.all(20),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Image.asset('images/weui_done2-filled.png', height: 65),
                   const SizedBox(height: 20),
-                  const Text('Thank You!', style: TextStyle(
-                      fontSize: 24, fontWeight: FontWeight.bold)),
+                  const Text(
+                    'Thank You!',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
                   const SizedBox(height: 10),
                   Text(
-                    'Your appointment has been successfully created on ${selectedDate
-                        .day} ${_getMonthName(
-                        selectedDate.month)} ${selectedDate
-                        .year} at $selectedTime',
+                    'Your appointment has been successfully created on ${selectedDate.day} ${_getMonthName(selectedDate.month)} ${selectedDate.year} at $selectedTime',
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -289,18 +316,19 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                 TextButton(
                   onPressed: () {
                     // العودة إلى شاشة التفاصيل الخاصة بالدكتور
-                    Navigator.pop(context); // اغلاق نافذة الحوار
-                    Navigator.pop(context); // العودة إلى شاشة الدكتور
-                  },
+                 //   Navigator.pop(context); // اغلاق نافذة الحوار
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => BottomBar()),
+      );},
+
                   child: const Text('OK'),
                 ),
-
               ],
             ),
       );
     });
   }
-
 
   void _pickDate() async {
     final DateTime? picked = await showDatePicker(
@@ -336,15 +364,31 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
 
   String _getMonthName(int month) {
     const List<String> months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
     ];
     return months[month - 1];
   }
 
   String _getDayName(DateTime date) {
     const List<String> weekdays = [
-      'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat',
+      'Sun',
+      'Mon',
+      'Tue',
+      'Wed',
+      'Thu',
+      'Fri',
+      'Sat',
     ];
     return weekdays[date.weekday % 7];
   }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../Widget/HistoryCases.dart';
+import '../Widget/LastCase.dart';
 import '../Widget/Top_doc.dart';
 import '../fontstyle.dart';
 import '../screen buttonbar/doctor Screen.dart';
@@ -49,7 +49,7 @@ class EndBart extends StatelessWidget {
               width:screenWidth,
 
               child:
-            HistoryCases(),
+            LastCase(),
 
             ),
 

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:graduationproject/fontstyle.dart';
 
 import '../Widget/arrow_back.dart';
-import 'Schedule.dart';
+import 'Appointment.dart';
 
 class DoctorDetailScreen extends StatelessWidget {
   final String doctorName;
@@ -25,13 +25,19 @@ class DoctorDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        elevation: 0,
+        centerTitle: true,
         leading: CustomIconButton(
           onPressed: () {
             Navigator.pop(context);
           },
           color: Colors.black,
         ),
-        title: Text('Doctor Details', style: AppTextStyles.f24),
+        title: const Text(
+          'Doctor Details',
+          style: TextStyle(fontWeight: FontWeight.normal),
+        ),
       ),
       body: Column(
         children: [
@@ -51,17 +57,19 @@ class DoctorDetailScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Padding(padding: EdgeInsets.only(left: 5),child:
                     Text(
                       doctorName,
                       style: AppTextStyles.f24.copyWith(fontSize: 18),
-                    ),
-                    Text(
+                    ),),
+              Padding(padding: EdgeInsets.only(left: 5),child:
+              Text(
                       "Skin Specialist",
                       style: AppTextStyles.f14.copyWith(
                         fontSize: 18,
                         color: Colors.grey,
                       ),
-                    ),
+                    ),),
                     const SizedBox(height: 15),
                   ],
                 ),
