@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:graduationproject/fontstyle.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../BottomBar.dart';
 import '../Widget/arrow_back.dart';
+import '../fontstyle.dart';
 
 class AppointmentScreen extends StatefulWidget {
   final String doctorName;
@@ -64,206 +64,225 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Card(
-              elevation: 3,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        CircleAvatar(
-                          backgroundImage: AssetImage(widget.doctorImage),
-                          radius: 30,
-                        ),
-                        const SizedBox(width: 16),
-                        Text(
-                          widget.doctorName,
-                          style: const TextStyle(fontSize: 18),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.arrow_back_ios, size: 16),
-                          onPressed: _pickDate,
-                        ),
-                        Text(
-                          '${_getMonthName(selectedDate.month)}, ${selectedDate.year}',
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.arrow_forward_ios, size: 16),
-                          onPressed: _pickDate,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    SizedBox(
-                      height: size.height * 0.08,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: days.length,
-                        itemBuilder: (context, index) {
-                          final day = days[index];
-                          bool isSelected = selectedDate.day == day;
-                          return GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                selectedDate = DateTime(
-                                  selectedDate.year,
-                                  selectedDate.month,
-                                  day,
-                                );
-                              });
-                            },
-                            child: AnimatedContainer(
-                              duration: const Duration(milliseconds: 300),
-                              width: 60,
-                              margin: const EdgeInsets.symmetric(horizontal: 6),
-                              decoration: BoxDecoration(
-                                color: isSelected ? primaryColor : lightGrey,
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    '$day',
-                                    style: TextStyle(
-                                      color:
-                                          isSelected
-                                              ? Colors.white
-                                              : Colors.black87,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text(
-                                    _getDayName(
-                                      DateTime(
-                                        selectedDate.year,
-                                        selectedDate.month,
-                                        day,
-                                      ),
-                                    ),
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color:
-                                          isSelected
-                                              ? Colors.white
-                                              : Colors.black54,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            _buildDoctorCard(primaryColor),
             const SizedBox(height: 20),
-            Card(
-              elevation: 3,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        CircleAvatar(
-                          radius: 15,
-                          backgroundColor: Colors.transparent,
-                          child: Image.asset(
-                            'images/calendar.png',
-                            color: Colors.black54, // اللون اللي انت عايزه
-                            colorBlendMode: BlendMode.srcIn, // طريقة الدمج
-                          ),
-                        ),
-
-                        SizedBox(width: 8),
-                        Text('Available', style: AppTextStyles.f18),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    Wrap(
-                      spacing: 10,
-                      runSpacing: 10,
-                      children:
-                          times.map((time) {
-                            bool isSelected = selectedTime == time;
-                            return GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  selectedTime = time;
-                                });
-                              },
-                              child: AnimatedContainer(
-                                duration: const Duration(milliseconds: 300),
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 20,
-                                  vertical: 12,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: isSelected ? primaryColor : lightGrey,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Text(
-                                  time,
-                                  style: TextStyle(
-                                    color:
-                                        isSelected
-                                            ? Colors.white
-                                            : Colors.black87,
-                                  ),
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            _buildAvailableTimesCard(primaryColor, lightGrey),
             const Spacer(),
-            SizedBox(
-              width: double.infinity,
-              child:
-                  isLoading
-                      ? const Center(
-                        child: CircularProgressIndicator(
-                          color: Color(0xFF557C91),
-                        ),
-                      )
-                      : ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: primaryColor,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        onPressed: _bookAppointment,
-                        child: const Text(
-                          'Book Appointment',
-                          style: TextStyle(fontSize: 18, color: Colors.white),
-                        ),
-                      ),
-            ),
+            _buildBookButton(primaryColor, isLoading),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDoctorCard(Color primaryColor) {
+    final List<int> days = _generateDays(selectedDate);
+    return Card(
+      elevation: 3,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                CircleAvatar(
+                  backgroundImage: widget.doctorImage.isNotEmpty
+                      ? NetworkImage(widget.doctorImage)
+                      : const AssetImage('assets/images/default_doctor.png')
+                  as ImageProvider,
+                  radius: 30,
+                  onBackgroundImageError: (_, __) {
+                    print('Image load error for ${widget.doctorImage}');
+                  },
+                ),
+                const SizedBox(width: 16),
+                Text(
+                  widget.doctorName,
+                  style: const TextStyle(fontSize: 18),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.arrow_back_ios, size: 16),
+                  onPressed: _pickDate,
+                ),
+                Text(
+                  '${_getMonthName(selectedDate.month)}, ${selectedDate.year}',
+                  style: const TextStyle(fontSize: 16),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.arrow_forward_ios, size: 16),
+                  onPressed: _pickDate,
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            _buildDaysList(days),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDaysList(List<int> days) {
+    final size = MediaQuery.of(context).size;
+    final primaryColor = const Color(0xFF557C91);
+    final lightGrey = Colors.black12;
+
+    return SizedBox(
+      height: size.height * 0.08,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: days.length,
+        itemBuilder: (context, index) {
+          final day = days[index];
+          bool isSelected = selectedDate.day == day;
+          return GestureDetector(
+            onTap: () {
+              setState(() {
+                selectedDate = DateTime(
+                  selectedDate.year,
+                  selectedDate.month,
+                  day,
+                );
+              });
+            },
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              width: 60,
+              margin: const EdgeInsets.symmetric(horizontal: 6),
+              decoration: BoxDecoration(
+                color: isSelected ? primaryColor : lightGrey,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    '$day',
+                    style: TextStyle(
+                      color: isSelected ? Colors.white : Colors.black87,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    _getDayName(
+                      DateTime(
+                        selectedDate.year,
+                        selectedDate.month,
+                        day,
+                      ),
+                    ),
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: isSelected ? Colors.white : Colors.black54,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildAvailableTimesCard(Color primaryColor, Color lightGrey) {
+    return Card(
+      elevation: 3,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                CircleAvatar(
+                  radius: 15,
+                  backgroundColor: Colors.transparent,
+                  child: Image.asset(
+                    'images/calendar.png',
+                    color: Colors.black54,
+                    colorBlendMode: BlendMode.srcIn,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Text('Available', style: AppTextStyles.f18),
+              ],
+            ),
+            const SizedBox(height: 16),
+            _buildTimesList(primaryColor, lightGrey),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTimesList(Color primaryColor, Color lightGrey) {
+    return Wrap(
+      spacing: 10,
+      runSpacing: 10,
+      children: times.map((time) {
+        bool isSelected = selectedTime == time;
+        return GestureDetector(
+          onTap: () {
+            setState(() {
+              selectedTime = time;
+            });
+          },
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 12,
+            ),
+            decoration: BoxDecoration(
+              color: isSelected ? primaryColor : lightGrey,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Text(
+              time,
+              style: TextStyle(
+                color: isSelected ? Colors.white : Colors.black87,
+              ),
+            ),
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildBookButton(Color primaryColor, bool isLoading) {
+    return SizedBox(
+      width: double.infinity,
+      child: isLoading
+          ? const Center(
+        child: CircularProgressIndicator(
+          color: Color(0xFF557C91),
+        ),
+      )
+          : ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: primaryColor,
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+        onPressed: _bookAppointment,
+        child: const Text(
+          'Book Appointment',
+          style: TextStyle(fontSize: 18, color: Colors.white),
         ),
       ),
     );
@@ -290,42 +309,40 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
       // عرض رسالة تأكيد
       showDialog(
         context: context,
-        builder:
-            (context) => AlertDialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
+        builder: (context) => AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          contentPadding: const EdgeInsets.all(20),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset('images/weui_done2-filled.png', height: 65),
+              const SizedBox(height: 20),
+              const Text(
+                'Thank You!',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
-              contentPadding: const EdgeInsets.all(20),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Image.asset('images/weui_done2-filled.png', height: 65),
-                  const SizedBox(height: 20),
-                  const Text(
-                    'Thank You!',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    'Your appointment has been successfully created on ${selectedDate.day} ${_getMonthName(selectedDate.month)} ${selectedDate.year} at $selectedTime',
-                    textAlign: TextAlign.center,
-                  ),
-                ],
+              const SizedBox(height: 10),
+              Text(
+                'Your appointment has been successfully created on ${selectedDate.day} ${_getMonthName(selectedDate.month)} ${selectedDate.year} at $selectedTime',
+                textAlign: TextAlign.center,
               ),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    // العودة إلى شاشة التفاصيل الخاصة بالدكتور
-                 //   Navigator.pop(context); // اغلاق نافذة الحوار
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => BottomBar()),
-      );},
-
-                  child: const Text('OK'),
-                ),
-              ],
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // إغلاق نافذة الحوار
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => BottomBar()),
+                );
+              },
+              child: const Text('OK'),
             ),
+          ],
+        ),
       );
     });
   }

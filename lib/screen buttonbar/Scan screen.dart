@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
@@ -6,14 +5,12 @@ import 'package:image_picker/image_picker.dart';
 
 import '../logic/ConfirmImageDialog.dart';
 import '../Widget/arrow_back.dart';
-import '../fontstyle.dart';
 import '../result/scan_result.dart';
 
 class SkinScanScreen extends StatefulWidget {
   @override
   _SkinScanScreenState createState() => _SkinScanScreenState();
 }
-
 class _SkinScanScreenState extends State<SkinScanScreen> {
   CameraController? _cameraController;
   List<CameraDescription>? _cameras;
@@ -71,7 +68,7 @@ class _SkinScanScreenState extends State<SkinScanScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ScanResult(imageFile: image),
+              builder: (context) => ScanResult(imageFile: image,),
             ),
           );
         },
@@ -80,9 +77,6 @@ class _SkinScanScreenState extends State<SkinScanScreen> {
   }
 
 
-  void _goToDiagnosisScreen() {
-    Navigator.pushNamed(context, '/diagnosis', arguments: _imageFile?.path);
-  }
 
   @override
   void dispose() {

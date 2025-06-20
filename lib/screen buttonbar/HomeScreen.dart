@@ -5,20 +5,6 @@ import '../homewidget/Middle_Bart.dart';
 import '../homewidget/endpart.dart';
 import '../homewidget/upper_part.dart';
 
-// class HomeScreen extends StatelessWidget {
-//   final Map<String, dynamic>? doctor; // بيانات الدكتور (ممكن تكون null)
-//
-//   HomeScreen({this.doctor});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: SingleChildScrollView(
-//         child: Column(children: [UpperPart(), MiddleBart(), EndBart()]),
-//       ),
-//     );
-//   }
-// }
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 

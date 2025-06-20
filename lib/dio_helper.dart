@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:graduationproject/ApiConstants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+
 class DioHelper {
   static final Dio _dio = Dio();
 
@@ -9,8 +11,8 @@ class DioHelper {
     final token = prefs.getString('access_token');
 
     _dio.options.baseUrl = ApiConstants.dio;
-    _dio.options.connectTimeout = const Duration(seconds: 60);
-    _dio.options.receiveTimeout = const Duration(seconds: 60);
+    _dio.options.connectTimeout = const Duration(seconds: 30);
+    _dio.options.receiveTimeout = const Duration(seconds: 30);
 
     if (token != null) {
       _dio.options.headers['Authorization'] = 'Bearer $token';
@@ -28,30 +30,13 @@ class DioHelper {
           print('Response: ${response.statusCode} ${response.data}');
           return handler.next(response);
         },
-        onError: (DioError e, ErrorInterceptorHandler handler) async {
+        onError: (DioException e, ErrorInterceptorHandler handler) async {
           print('Error: ${e.response?.statusCode} ${e.response?.data}');
+          print('Error Type: ${e.type}, Message: ${e.message}');
           if (e.response?.statusCode == 401) {
-            bool success = await _refreshToken();
-            if (success) {
-              final request = e.requestOptions;
-              final opts = Options(
-                method: request.method,
-                headers: {
-                  ...request.headers,
-                  'Authorization': _dio.options.headers['Authorization'],
-                },
-              );
-              try {
-                final cloneReq = await _dio.request(
-                  request.path,
-                  options: opts,
-                  data: request.data,
-                  queryParameters: request.queryParameters,
-                );
-                return handler.resolve(cloneReq);
-              } catch (e) {
-                return handler.reject(e as DioError);
-              }
+            final refreshed = await _refreshToken();
+            if (refreshed) {
+              return handler.resolve(await _retry(e.requestOptions));
             }
           }
           return handler.next(e);
@@ -61,6 +46,18 @@ class DioHelper {
   }
 
   static Dio get dio => _dio;
+
+  static Future<bool> refreshToken() async {
+    return _refreshToken();
+  }
+
+  static Future<Response<dynamic>> _retry(RequestOptions requestOptions) async {
+    final options = Options(
+      method: requestOptions.method,
+      headers: requestOptions.headers,
+    );
+    return _dio.request(requestOptions.path, data: requestOptions.data, options: options);
+  }
 
   static Future<bool> _refreshToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -72,13 +69,13 @@ class DioHelper {
 
     try {
       final tempDio = Dio();
-      tempDio.options.baseUrl = _dio.options.baseUrl;
-      tempDio.options.connectTimeout = const Duration(seconds: 10);
-      tempDio.options.receiveTimeout = const Duration(seconds: 10);
+      tempDio.options.baseUrl = ApiConstants.dio;
+      tempDio.options.connectTimeout = const Duration(seconds: 30);
+      tempDio.options.receiveTimeout = const Duration(seconds: 30);
       tempDio.options.headers['Content-Type'] = 'application/json';
 
       final response = await tempDio.post(
-        'users/token/refresh/',
+        'token/refresh/',
         data: {'refresh': refresh},
       );
 
@@ -96,29 +93,49 @@ class DioHelper {
       }
     } catch (e) {
       print('Token refresh failed: $e');
-      if (e is DioError) {
+      if (e is DioException) {
         print('Error response: ${e.response?.data}');
       }
     }
     return false;
   }
 
-  static Future<Response> postWithoutAuth(String url, dynamic data) async {
-    final options = Options(contentType: 'application/json', headers: {});
-    return await _dio.post(url, data: data, options: options);
-  }
-
   static Future<Response> postWithoutAuthRequest(
-    String url, {
-    dynamic data,
-  }) async {
+      String url, {
+        dynamic data,
+        Options? options,
+      }) async {
     final Dio tempDio = Dio();
+    tempDio.options.baseUrl = ApiConstants.dio;
     tempDio.options.headers = {'Content-Type': 'application/json'};
-    tempDio.options.connectTimeout = const Duration(seconds: 10);
-    tempDio.options.receiveTimeout = const Duration(seconds: 10);
-    return await tempDio.post(url, data: data);
+    tempDio.options.connectTimeout = const Duration(seconds: 30);
+    tempDio.options.receiveTimeout = const Duration(seconds: 30);
+
+    tempDio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) {
+          print('Request Details: ${options.method} ${options.uri}');
+          print('Headers: ${options.headers}');
+          print('Data: ${options.data}');
+          return handler.next(options);
+        },
+        onResponse: (response, handler) {
+          print('Response: ${response.statusCode} ${response.data}');
+          return handler.next(response);
+        },
+        onError: (DioException e, handler) {
+          print('Error: ${e.response?.statusCode} ${e.response?.data}');
+          print('Error Type: ${e.type}, Message: ${e.message}');
+          return handler.next(e);
+        },
+      ),
+    );
+
+    try {
+      return await tempDio.post(url, data: data, options: options);
+    } catch (e) {
+      print('Exception in postWithoutAuthRequest: $e');
+      rethrow;
+    }
   }
 }
-//git add .
-// git commit -m "Link AI model with flutter"
-// git push

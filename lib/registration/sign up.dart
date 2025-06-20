@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:graduationproject/ApiConstants.dart';
+import 'package:graduationproject/Widget/ElevatedButton.dart';
 
-import '../Widget/ElevatedButton.dart';
 import '../dio_helper.dart';
 import '../fontstyle.dart';
 import '../logic/buildTextField.dart';
@@ -20,8 +20,7 @@ class _SignUpState extends State<SignUp> {
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController =
-      TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
 
   bool isButtonEnabled = false;
 
@@ -47,74 +46,80 @@ class _SignUpState extends State<SignUp> {
     setState(() {
       isButtonEnabled =
           nameController.text.isNotEmpty &&
-          phoneController.text.isNotEmpty &&
-          emailController.text.isNotEmpty &&
-          passwordController.text.isNotEmpty &&
-          confirmPasswordController.text.isNotEmpty &&
-          passwordController.text == confirmPasswordController.text;
+              phoneController.text.isNotEmpty &&
+              emailController.text.isNotEmpty &&
+              passwordController.text.isNotEmpty &&
+              confirmPasswordController.text.isNotEmpty &&
+              passwordController.text == confirmPasswordController.text &&
+              isValidEmail(emailController.text) &&
+              isValidPhone(phoneController.text);
     });
   }
 
   Future<void> register(BuildContext context) async {
     if (!isButtonEnabled) {
-      showErrorDialog(context, "Please fill all the fields!");
+      showErrorDialog(context, "Please fill all fields correctly!");
       return;
     }
 
     String apiUrl = ApiConstants.signup;
 
     try {
+      print('Initiating signup request to: ${ApiConstants.dio}$apiUrl with data: ${{
+        "email": emailController.text.trim(),
+        "full_name": nameController.text.trim(),
+        "phone_number": phoneController.text.trim(),
+        "password": passwordController.text,
+        "confirm_password": confirmPasswordController.text,
+      }}');
       Response response = await DioHelper.postWithoutAuthRequest(
         apiUrl,
         data: {
+          "email": emailController.text.trim(),
           "full_name": nameController.text.trim(),
           "phone_number": phoneController.text.trim(),
-          "email": emailController.text.trim(),
           "password": passwordController.text,
           "confirm_password": confirmPasswordController.text,
         },
       );
 
       if (response.statusCode == 201) {
-        // نجاح التسجيل
+        final data = response.data;
         showDialog(
           context: context,
-          builder:
-              (context) => AlertDialog(
-                title: const Text("Success"),
-                content: const Text(
-                  "Account created successfully! Please log in.",
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => Login()),
-                      );
-                    },
-                    child: const Text("Go to Login"),
-                  ),
-                ],
+          builder: (context) => AlertDialog(
+            title: const Text("Success"),
+            content: Text(data['message'] ?? "Account created successfully! Please log in."),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => Login()),
+                  );
+                },
+                child: const Text("Go to Login"),
               ),
+            ],
+          ),
         );
       } else {
-        showErrorDialog(context, "Registration failed. Please try again.");
+        showErrorDialog(context, "Registration failed. Status code: ${response.statusCode}, Response: ${response.data['error'] ?? response.data}");
       }
     } catch (e) {
-      if (e is DioError) {
-        final statusCode = e.response?.statusCode;
-        final responseData = e.response?.data;
-
-        if (statusCode == 400 && responseData is Map) {
-          String errorMessage = responseData.values
-              .map(
-                (value) => value is List ? value.join("\n") : value.toString(),
-              )
-              .join("\n");
+      if (e is DioException) {
+        print('DioException caught: Type: ${e.type}, StatusCode: ${e.response?.statusCode}, Response: ${e.response?.data}, Message: ${e.message}');
+        if (e.type == DioExceptionType.connectionTimeout || e.type == DioExceptionType.receiveTimeout) {
+          showErrorDialog(context, "Connection timed out. Please check your internet connection.");
+        } else if (e.response == null) {
+          showErrorDialog(context, "No response from server. Please try again later. Error: ${e.message}");
+        } else if (e.response?.statusCode == 400) {
+          String errorMessage = e.response!.data['error'] ?? e.response!.data['email'] ?? e.response!.data['phone_number'] ?? 'Invalid data. Please check your input.';
           showErrorDialog(context, errorMessage);
+        } else if (e.response?.statusCode == 404) {
+          showErrorDialog(context, "Page not found. Please check the API endpoint. Error: ${e.message}");
         } else {
-          showErrorDialog(context, "Server error: ${e.message}");
+          showErrorDialog(context, "Server error: ${e.response?.data ?? e.message ?? 'Unknown error'}");
         }
       } else {
         showErrorDialog(context, "Unexpected error: ${e.toString()}");
@@ -139,6 +144,7 @@ class _SignUpState extends State<SignUp> {
       },
     );
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -202,16 +208,9 @@ class _SignUpState extends State<SignUp> {
                   ),
                   const SizedBox(height: 50),
                   Elevated_Button(
-                    text: 'Sign Up',
-                    onPressed:
-                        isButtonEnabled
-                            ? () => register(context)
-                            : () {
-                              showErrorDialog(
-                                context,
-                                "Please fill all the fields!",
-                              );
-                            },
+                    onPressed: isButtonEnabled ? () => register(context) : null,
+
+                    text:'Sign Up',
                   ),
                   const SizedBox(height: 30),
                   Row(

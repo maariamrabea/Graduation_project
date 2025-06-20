@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:graduationproject/fontstyle.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../Widget/time.dart';
+import '../ExtraScreen/RemindersScreen.dart';
 
 class MiddleBart extends StatefulWidget {
   const MiddleBart({super.key});
@@ -11,7 +11,6 @@ class MiddleBart extends StatefulWidget {
   @override
   _MiddleBartState createState() => _MiddleBartState();
 }
-
 
 class _MiddleBartState extends State<MiddleBart> {
   String? doctorName;
@@ -62,68 +61,79 @@ class _MiddleBartState extends State<MiddleBart> {
                   color: Colors.black,
                 ),
               ),
-
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => RemindersScreen()),
+                  );
+                },
+                child: Text(
+                  "See all",
+                  style: AppTextStyles.f18.copyWith(fontSize: 12),
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 16),
-          Container(
-            height: 131,
-            width: 355,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(15),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      doctorImage != null
-                          ? Image.asset(doctorImage!, width: 50, height: 50)
-                          : const Icon(Icons.person, size: 50),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            doctorName ?? '',
-                            style: AppTextStyles.f16.copyWith(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          Text(
-                            doctorSpecialty ?? '',
-                            style: AppTextStyles.f14.copyWith(fontSize: 12),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(width: 90),
-                      GestureDetector(
-                        onTap: () {},
-                        child: Container(
-                          width: 38,
-                          height: 38,
-                          decoration: BoxDecoration(
-                            color: ColorsApp.color1,
-                            borderRadius: BorderRadius.circular(20),
-                            image: const DecorationImage(
-                              image: AssetImage("images/messages-3.png"),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 15),
-                  appointmentDate != null
-                      ? Time(appointmentDate: appointmentDate)
-                      : const Text("No appointment selected"),
-                ],
-              ),
-            ),
-          ),
+          // Container(
+          //   height: 131,
+          //   width: 355,
+          //   decoration: BoxDecoration(
+          //     color: Colors.white,
+          //     borderRadius: BorderRadius.circular(12),
+          //   ),
+          //   child: Padding(
+          //     padding: const EdgeInsets.all(15),
+          //     child: Column(
+          //       children: [
+          //         Row(
+          //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //           children: [
+          //             doctorImage != null
+          //                 ? Image.asset(doctorImage!, width: 50, height: 50)
+          //                 : const Icon(Icons.person, size: 50),
+          //             Column(
+          //               crossAxisAlignment: CrossAxisAlignment.start,
+          //               children: [
+          //                 Text(
+          //                   doctorName ?? '',
+          //                   style: AppTextStyles.f16.copyWith(
+          //                     color: Colors.black,
+          //                     fontWeight: FontWeight.w500,
+          //                   ),
+          //                 ),
+          //                 Text(
+          //                   doctorSpecialty ?? '',
+          //                   style: AppTextStyles.f14.copyWith(fontSize: 12),
+          //                 ),
+          //               ],
+          //             ),
+          //             const SizedBox(width: 90),
+          //             GestureDetector(
+          //               onTap: () {},
+          //               child: Container(
+          //                 width: 38,
+          //                 height: 38,
+          //                 decoration: BoxDecoration(
+          //                   color: ColorsApp.color1,
+          //                   borderRadius: BorderRadius.circular(20),
+          //                   image: const DecorationImage(
+          //                     image: AssetImage("images/messages-3.png"),
+          //                   ),
+          //                 ),
+          //               ),
+          //             ),
+          //           ],
+          //         ),
+          //         const SizedBox(height: 15),
+          //         appointmentDate != null
+          //             ? Time(appointmentDate: appointmentDate)
+          //             : const Text("No appointment selected"),
+          //       ],
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

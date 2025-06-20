@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:graduationproject/screen%20buttonbar/HomeScreen.dart';
 
-import 'BottomBar.dart';
 import 'dio_helper.dart';
-import 'fontstyle.dart';
+
 import 'frist one/SplashScreen.dart';
 
 void main() async {

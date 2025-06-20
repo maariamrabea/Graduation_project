@@ -3,17 +3,28 @@ import 'package:flutter/material.dart';
 
 import '../fontstyle.dart';
 
-class RatingExperienceWidget extends StatelessWidget {
+
+ class RatingExperienceWidget extends StatelessWidget {
+   final double rating;
+   final String patients;
+   final String experience;
+
+   const RatingExperienceWidget({
+     required this.rating,
+     required this.patients,
+     required this.experience,
+   });
+
    @override
    Widget build(BuildContext context) {
      return Row(
        mainAxisAlignment: MainAxisAlignment.center,
        children: [
-         _buildInfo(Icons.star, "4.8"),
+         _buildInfo(Icons.star, rating.toString()),
          _divider(),
-         _buildInfo(Icons.person, "140 Patient"),
+         _buildInfo(Icons.person, patients),
          _divider(),
-         _buildInfo(Icons.work, "3Y Experience"),
+         _buildInfo(Icons.work, experience),
        ],
      );
    }

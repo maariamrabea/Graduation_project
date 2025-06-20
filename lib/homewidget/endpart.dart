@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:graduationproject/screen%20buttonbar/HistoryScreen.dart';
 
 import '../Widget/LastCase.dart';
-import '../Widget/Top_doc.dart';
 import '../fontstyle.dart';
-import '../screen buttonbar/doctor Screen.dart';
 
 class EndBart extends StatelessWidget {
   const EndBart({super.key});
@@ -16,7 +15,6 @@ class EndBart extends StatelessWidget {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.only(left: 10, right: 10),
-        // اختياري، لتحسين المظهر
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -34,7 +32,7 @@ class EndBart extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => DoctorScreen()),
+                      MaterialPageRoute(builder: (context) => HistoryCases()),
                     );
                   },
                   child: Text(
@@ -45,19 +43,16 @@ class EndBart extends StatelessWidget {
               ],
             ),
             Container(
-              height:(screenHeight* 266)/screenHeight,
-              width:screenWidth,
+              height: (screenHeight * 266) / screenHeight,
+              width: screenWidth,
 
-              child:
-            LastCase(),
-
+              child: LastCase(),
             ),
 
-           // Top_Doctor(),
+            // Top_Doctor(),
           ],
         ),
       ),
     );
   }
 }
-
