@@ -5,13 +5,18 @@ import 'package:graduationproject/ApiConstants.dart';
 import 'package:http/http.dart' as http;
 
 import '../Widget/Button_resetpassword.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+import 'package:dio/dio.dart';
+
+import '../Widget/arrow_back.dart';
+import '../dio_helper.dart';
 
 class NewPasswordScreen extends StatefulWidget {
-  final String uid;
-  final String token;
+  final String email;
 
-  const NewPasswordScreen({Key? key, required this.uid, required this.token})
-      : super(key: key);
+  const NewPasswordScreen({Key? key, required this.email}) : super(key: key);
 
   @override
   State<NewPasswordScreen> createState() => _NewPasswordScreenState();
@@ -36,23 +41,19 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _isLoading = true);
 
-    final url = Uri.parse(
-      ApiConstants.new_password,
-    );
+    final url = ApiConstants.dio + ApiConstants.new_password;
     final body = {
-      'uid': widget.uid,
-      'token': widget.token,
-      'new_password': _passwordController.text,
-      're_new_password': _confirmController.text,
+      'email': widget.email,
+      'password': _passwordController.text,
+      'confirm_password': _confirmController.text,
     };
 
     try {
-      final response = await http.post(
-        url,
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(body),
-      );
-      final data = jsonDecode(response.body);
+      final response = await DioHelper.postWithoutAuthRequest(url, data: body);
+
+      final data = response.data;
+      debugPrint('⏳ Status: ${response.statusCode}');
+      debugPrint('🌐 Resp: $data');
 
       if (response.statusCode == 200) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -60,17 +61,33 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
         );
         Navigator.popUntil(context, ModalRoute.withName('/'));
       } else {
-        _showMessage(data['detail'] ?? 'Failed to reset password');
+        String errorMsg = '';
+        if (data is Map<String, dynamic>) {
+          data.forEach((k, v) {
+            if (v is List)
+              errorMsg += '$k: ${v.join(", ")}\n';
+            else
+              errorMsg += '$k: $v\n';
+          });
+        }
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              errorMsg.trim().isNotEmpty
+                  ? errorMsg
+                  : (data['detail'] ?? 'Failed to reset password'),
+            ),
+          ),
+        );
       }
     } catch (e) {
-      _showMessage('Network error: $e');
+      debugPrint('❌ Error: $e');
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Network error: $e')));
     } finally {
       setState(() => _isLoading = false);
     }
-  }
-
-  void _showMessage(String msg) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
   }
 
   @override
@@ -79,13 +96,17 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
+          leading: CustomIconButton(
+            onPressed: () {
+              Navigator.pop(
+                context,
+
+              );
+            },
             color: Colors.black,
-            onPressed: () => Navigator.pop(context),
           ),
           backgroundColor: Colors.white,
-          elevation: 0,
+
         ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -97,7 +118,6 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                 const SizedBox(height: 10),
                 const Text(
                   'Create New Password',
-                  textAlign: TextAlign.left,
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 10),
@@ -108,11 +128,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                 const SizedBox(height: 30),
                 const Text(
                   'New Password',
-                  textAlign: TextAlign.left,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(height: 10),
                 TextFormField(
@@ -142,7 +158,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                     if (!RegExp(r'[A-Z]').hasMatch(v))
                       return 'Include uppercase';
                     if (!RegExp(r'[0-9]').hasMatch(v)) return 'Include digit';
-                    if (!RegExp(r'[!@#\\$%^&*(),.?":{}|<>]').hasMatch(v))
+                    if (!RegExp(r'[!@#\$%^&*(),.?":{}|<>]').hasMatch(v))
                       return 'Include special';
                     return null;
                   },
@@ -150,11 +166,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                 const SizedBox(height: 30),
                 const Text(
                   'Confirm Password',
-                  textAlign: TextAlign.left,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(height: 10),
                 TextFormField(
@@ -189,7 +201,9 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                 Button_resetpassword(
                   formKey: _formKey,
                   onPressed: _resetPassword,
-                ),
+                ),SizedBox(height: 20,),
+                if (_isLoading)
+                  const Center(child: CircularProgressIndicator()),
               ],
             ),
           ),

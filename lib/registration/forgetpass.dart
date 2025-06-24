@@ -1,12 +1,12 @@
-import 'dart:convert';
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
-import '../Widget/Button_forgetpassword.dart';
-import '../Widget/OTP_widget.dart';
+import '../ApiConstants.dart';
+import '../Widget/Button_forgotpasspage.dart';
+import 'OTP_screen.dart';
 import '../Widget/arrow_back.dart';
-import '../maram/Textfield_forgotpasspage.dart';
+import '../Widget/textfield in forgetpassword page.dart';
+import '../dio_helper.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({Key? key}) : super(key: key);
@@ -30,18 +30,16 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _isLoading = true);
 
-    final url = Uri.parse(
-      'https://7e3a-197-35-2-35.ngrok-free.app/api/users/password/otp/request/',
-    );
     final body = {'email': _emailController.text.trim()};
+    final fullUrl = ApiConstants.dio + ApiConstants.forget_password;
 
     try {
-      final response = await http.post(
-        url,
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(body),
+      final response = await DioHelper.postWithoutAuthRequest(
+        fullUrl,
+        data: body,
       );
-      final data = jsonDecode(response.body);
+
+      final data = response.data;
 
       if (response.statusCode == 200) {
         Navigator.push(
@@ -72,11 +70,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         appBar: AppBar(
           leading: CustomIconButton(
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pop(
+                context,
+
+              );
             },
             color: Colors.black,
           ),
           backgroundColor: Colors.white,
+
         ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -103,6 +105,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   emailController: _emailController,
                   onSend: (email) => _requestOtp(),
                 ),
+                SizedBox(height: 20,),
                 if (_isLoading)
                   const Center(child: CircularProgressIndicator()),
               ],

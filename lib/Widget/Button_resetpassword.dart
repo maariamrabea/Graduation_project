@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../fontstyle.dart';
+
 class Button_resetpassword extends StatelessWidget {
   final GlobalKey<FormState> formKey;
   final VoidCallback onPressed;
@@ -23,14 +25,9 @@ class Button_resetpassword extends StatelessWidget {
           onPressed(); // استدعاء الدالة اللي جاية من بره
         }
       },
-      child: const Text(
+      child: Text(
         "Reset Password",
-        style: TextStyle(
-          color: Colors.white,
-          fontFamily: "Poppins",
-          fontWeight: FontWeight.normal,
-          fontSize: 15.0,
-        ),
+        style: AppTextStyles.f18.copyWith(color: Colors.white),
       ),
     );
   }

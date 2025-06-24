@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 class SmallImageContainer extends StatelessWidget {
   final ImageProvider image;
   final VoidCallback onTap;

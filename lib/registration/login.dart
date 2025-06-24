@@ -7,12 +7,9 @@ import 'package:graduationproject/registration/sign%20up.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../ApiConstants.dart';
+import '../BottomNavBarDoctor.dart';
 import '../dio_helper.dart';
-import '../logic/buildTextField.dart';
-
 import 'forgetpass.dart';
-
-// افترضت إن الاسم SignUp موجود كـsign_up_screen.dart
 
 class Login extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
@@ -31,14 +28,12 @@ class Login extends StatelessWidget {
     }
 
     try {
-      // إرسال طلب تسجيل الدخول باستخدام DioHelper
-      print('Initiating login request to: ${ApiConstants.dio}${ApiConstants.login} with data: {"email": "$email", "password": "$password"}');
+      print(
+        'Initiating login request to: ${ApiConstants.dio}${ApiConstants.login} with data: {"email": "$email", "password": "$password"}',
+      );
       Response response = await DioHelper.postWithoutAuthRequest(
         ApiConstants.login,
-        data: {
-          'email': email,
-          'password': password,
-        },
+        data: {'email': email, 'password': password},
       );
 
       // التحقق من نجاح الطلب
@@ -46,40 +41,67 @@ class Login extends StatelessWidget {
         final data = response.data;
         String accessToken = data['access'];
         String refreshToken = data['refresh'];
+        String userId = data['user']['id'].toString();
+        String userType = data['user']['user_type'];
 
-        // تخزين التوكنات في SharedPreferences
+        // تخزين التوكنات وuser_id و user_type في SharedPreferences
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString('access_token', accessToken);
         await prefs.setString('refresh_token', refreshToken);
+        await prefs.setString('user_id', userId);
+        await prefs.setString('user_type', userType); // Save user_type
+        print('Login successful: Tokens, User ID, and User Type saved - $data');
 
         // تحديث رأس Authorization في Dio
         DioHelper.dio.options.headers['Authorization'] = 'Bearer $accessToken';
 
-        print('Login successful: $data');
-
-        // الانتقال إلى الصفحة الرئيسية
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => BottomBar()),
-        );
+        // الانتقال إلى الصفحة المناسبة بناءً على user_type
+        if (userType == 'doctor') {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => BottomNavBarDoctor()),
+          );
+        } else if (userType == 'patient') {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => BottomBar()),
+          );
+        } else {
+          showErrorDialog(
+            context,
+            'Unknown user type. Please contact support.',
+          );
+        }
       } else {
-        showErrorDialog(context, 'Login failed. Status code: ${response.statusCode}, Response: ${response.data}');
+        showErrorDialog(
+          context,
+          'Login failed. Status code: ${response.statusCode}, Response: ${response.data}',
+        );
       }
     } catch (e) {
       // معالجة الأخطاء
       String errorMessage = 'Login failed.';
       if (e is DioException) {
-        print('DioException caught: Type: ${e.type}, StatusCode: ${e.response?.statusCode}, Response: ${e.response?.data}, Message: ${e.message}');
-        if (e.type == DioExceptionType.connectionTimeout || e.type == DioExceptionType.receiveTimeout) {
-          errorMessage = 'Connection timed out. Please check your internet connection.';
+        print(
+          'DioException caught: Type: ${e.type}, StatusCode: ${e.response?.statusCode}, Response: ${e.response?.data}, Message: ${e.message}',
+        );
+        if (e.type == DioExceptionType.connectionTimeout ||
+            e.type == DioExceptionType.receiveTimeout) {
+          errorMessage =
+              'Connection timed out. Please check your internet connection.';
         } else if (e.response == null) {
-          errorMessage = 'No response from server. Please try again later. Error: ${e.message}';
+          errorMessage =
+              'No response from server. Please try again later. Error: ${e.message}';
         } else if (e.response?.statusCode == 400 && e.response?.data is Map) {
-          errorMessage = e.response!.data['error'] ?? 'Invalid credentials. Please try again.';
+          errorMessage =
+              e.response!.data['error'] ??
+              'Invalid credentials. Please try again.';
         } else if (e.response?.statusCode == 404) {
-          errorMessage = 'Page not found. Please check the API endpoint. Error: ${e.message}';
+          errorMessage =
+              'Page not found. Please check the API endpoint. Error: ${e.message}';
         } else {
-          errorMessage = 'Server error: ${e.response?.data ?? e.message ?? 'Unknown error'}';
+          errorMessage =
+              'Server error: ${e.response?.data ?? e.message ?? 'Unknown error'}';
         }
       } else {
         print('Unexpected error: $e');
@@ -92,19 +114,36 @@ class Login extends StatelessWidget {
   void showErrorDialog(BuildContext context, String message) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Error'),
-        content: Text(message),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('OK'),
+      builder:
+          (context) => AlertDialog(
+            title: const Text('Error'),
+            content: Text(message),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('OK'),
+              ),
+            ],
           ),
-        ],
-      ),
     );
   }
 
+  Widget buildTextField({
+    required String hint,
+    required TextEditingController Controller,
+    required bool ispassword,
+  }) {
+    return TextField(
+      controller: Controller,
+      obscureText: ispassword,
+      decoration: InputDecoration(
+        hintText: hint,
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+        filled: true,
+        fillColor: Colors.grey[200],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -182,7 +221,6 @@ class Login extends StatelessWidget {
                     onPressed: () => login(context),
                     text: 'Login',
                   ),
-
                   const SizedBox(height: 50),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

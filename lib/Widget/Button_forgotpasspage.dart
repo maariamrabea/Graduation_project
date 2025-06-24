@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../fontstyle.dart';
+
 class Button_forgotpasspage extends StatelessWidget {
   final GlobalKey<FormState> formKey;
   final TextEditingController emailController;
@@ -27,14 +29,9 @@ class Button_forgotpasspage extends StatelessWidget {
         textStyle: const TextStyle(fontSize: 20),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
       ),
-      child: const Text(
+      child:  Text(
         'Send Code',
-        style: TextStyle(
-          color: Colors.white,
-          fontFamily: "Poppins",
-          fontWeight: FontWeight.normal,
-          fontSize: 15.0,
-        ),
+          style: AppTextStyles.f18.copyWith(color: Colors.white)
       ),
     );
   }

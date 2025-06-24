@@ -1,9 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 import '../ApiConstants.dart';
+import '../dio_helper.dart';
+import '../fontstyle.dart';
 import '../registration/newpassowrd.dart';
 
 class ButtonVerify extends StatelessWidget {
@@ -19,24 +18,26 @@ class ButtonVerify extends StatelessWidget {
   Future<void> _verifyOtp(BuildContext context) async {
     String otp = otpControllers.map((c) => c.text).join();
 
-    if (otp.length == 4) {
+    if (otp.length == 4 && otpControllers.every((c) => c.text.isNotEmpty)) {
       try {
-        final response = await http.post(
-          Uri.parse(ApiConstants.otp),
-          headers: {'Content-Type': 'application/json'},
-          body: jsonEncode({"email": email, "otp": otp}),
+        final url = ApiConstants.dio + ApiConstants.otp;
+        final response = await DioHelper.postWithoutAuthRequest(
+          url,
+          data: {"email": email, "otp": otp},
         );
 
-        final data = jsonDecode(response.body);
+        final data = response.data;
+        debugPrint('⌛ ${response.statusCode} ← $data');
 
         if (response.statusCode == 200) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(data['message'] ?? 'OTP verified successfully'),
+            ),
+          );
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder:
-                  (_) =>
-                      NewPasswordScreen(uid: data['uid'], token: data['token']),
-            ),
+            MaterialPageRoute(builder: (_) => NewPasswordScreen(email: email)),
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -59,18 +60,14 @@ class ButtonVerify extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () => _verifyOtp(context),
-      child: const Text(
-        "Verify",
-        style: TextStyle(
-          color: Colors.white,
-          fontFamily: "Poppins",
-          fontSize: 16.0,
-        ),
-      ),
       style: ElevatedButton.styleFrom(
         backgroundColor: const Color(0xff577C8E),
         padding: const EdgeInsets.all(10),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      ),
+      child: Text(
+        "Verify",
+        style: AppTextStyles.f18.copyWith(color: Colors.white),
       ),
     );
   }

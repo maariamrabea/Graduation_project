@@ -1,21 +1,21 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:graduationproject/fontstyle.dart';
 
 import '../ApiConstants.dart';
 import '../Screenappbar/chatpot.dart';
+import '../Widget/con_Icon.dart';
 import '../dio_helper.dart';
-import 'con_Icon.dart';
+import '../fontstyle.dart';
 
-class HomeAppBar extends StatefulWidget {
-  const HomeAppBar({super.key});
+class Appbardoc extends StatefulWidget {
+  const Appbardoc({super.key});
 
   @override
-  _HomeAppBarState createState() => _HomeAppBarState();
+  _AppbardocState createState() => _AppbardocState();
 }
 
-class _HomeAppBarState extends State<HomeAppBar> {
-  String? firstName;
+class _AppbardocState extends State<Appbardoc> {
+  String? fullname;
   String? profilePictureUrl;
   bool isLoading = true;
 
@@ -28,11 +28,13 @@ class _HomeAppBarState extends State<HomeAppBar> {
   Future<void> _fetchProfile() async {
     setState(() => isLoading = true);
     try {
-      final response = await DioHelper.dio.get('${ApiConstants.dio}api/users/profile/');
+      final response = await DioHelper.dio.get(
+        '${ApiConstants.dio}api/users/profile/',
+      );
       if (response.statusCode == 200) {
         setState(() {
           final fullName = response.data['full_name'] ?? 'User';
-          firstName = fullName.split(' ')[0]; // أخذ الاسم الأول بس
+          fullname = fullName; // أخذ الاسم الأول بس
           profilePictureUrl = response.data['profile_picture_url'];
           isLoading = false;
         });
@@ -67,8 +69,8 @@ class _HomeAppBarState extends State<HomeAppBar> {
         children: [
           Padding(padding: EdgeInsets.only(left: 5)),
           Container(
-            width: 40,
-            height: 40,
+            width: 60,
+            height: 60,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               image:
@@ -100,31 +102,25 @@ class _HomeAppBarState extends State<HomeAppBar> {
             children: [
               Text("Hello", style: AppTextStyles.f14.copyWith(fontSize: 16)),
               Text(
-                firstName ?? 'User',
+                fullname ?? 'User',
                 style: AppTextStyles.f18.copyWith(fontWeight: FontWeight.w500),
               ),
             ],
           ),
           Spacer(),
-          SmallImageContainer(
-            image: AssetImage("images/Chatbot.png"),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ChatBotScreen()),
-              );
-            },
-          ),
-
-          SizedBox(width: 15),
-          SmallImageContainer(
-            image: AssetImage("images/notification.png"),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ChatBotScreen()),
-              );
-            },
+          Column(
+            children: [
+              SizedBox(height: 10),
+              SmallImageContainer(
+                image: AssetImage("images/notification.png"),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ChatBotScreen()),
+                  );
+                },
+              ),
+            ],
           ),
         ],
       ),

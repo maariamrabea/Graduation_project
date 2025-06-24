@@ -1,7 +1,11 @@
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'Button_verifyotp.dart widget.dart';
-import 'TextfieldOTPVerify.dart';
+import '../Widget/Button_verifyotp.dart widget.dart';
+import '../Widget/TextfieldOTPVerify.dart';
+import '../Widget/arrow_back.dart';
+import '../fontstyle.dart';
 
 class Otpverify extends StatefulWidget {
   final String email;
@@ -40,14 +44,17 @@ class _OtpverifyState extends State<Otpverify> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.navigate_before),
-          iconSize: 35.0,
-          color: Colors.black,
+        leading: CustomIconButton(
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pop(
+              context,
+              //MaterialPageRoute(builder: (context) => BottomBar()),
+            );
           },
+          color: Colors.black,
         ),
+        backgroundColor: Colors.white,
+
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
