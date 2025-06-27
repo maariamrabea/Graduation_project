@@ -22,6 +22,7 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
     super.initState();
     fetchLatestPendingBooking();
   }
+
   Future<void> fetchLatestPendingBooking() async {
     setState(() {
       isLoading = true;
@@ -75,7 +76,6 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
       print('Fetch error: $e');
     }
   }
-
 
   Future<void> updateBookingStatus(String status) async {
     if (latestBooking == null || latestBooking!['id'] == null) {
@@ -271,7 +271,9 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => AppointmentsScreen()),
+                        MaterialPageRoute(
+                          builder: (context) => AppointmentsScreen(),
+                        ),
                       );
                     },
                     child: const Text(
@@ -374,60 +376,60 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
                                 ),
 
                                 // width: 200,
-                                child: 
-                                Padding(padding: EdgeInsets.all(5),child:
-                                Row(
-
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Icon(
-                                              Icons.calendar_today,
-                                              color:Color(0xFF6D838E),
-                                              size: 16,
-                                            ),
-                                            SizedBox(width: 4),
-                                            Text(
-                                              _formatDate(
-                                                latestBooking!['booking_date'] ??
-                                                    '',
-                                              ),
-                                              style: TextStyle(
+                                child: Padding(
+                                  padding: EdgeInsets.all(5),
+                                  child: Row(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Icon(
+                                                Icons.calendar_today,
                                                 color: Color(0xFF6D838E),
+                                                size: 16,
                                               ),
-                                            ),
-                                          ],
-                                        ),
-SizedBox(width: 55,),
-                                        Row(
-                                          children: [
-                                            Icon(
-                                              Icons.access_time,
-                                              color: Color(0xFF6D838E),
-                                              size: 16,
-                                            ),
-                                            SizedBox(width: 4),
-                                            Text(
-                                              _formatTime(
-                                                latestBooking!['booking_time'] ??
-                                                    '',
+                                              SizedBox(width: 4),
+                                              Text(
+                                                _formatDate(
+                                                  latestBooking!['booking_date'] ??
+                                                      '',
+                                                ),
+                                                style: TextStyle(
+                                                  color: Color(0xFF6D838E),
+                                                ),
                                               ),
-                                              style: TextStyle(
+                                            ],
+                                          ),
+                                          SizedBox(width: 55),
+                                          Row(
+                                            children: [
+                                              Icon(
+                                                Icons.access_time,
                                                 color: Color(0xFF6D838E),
+                                                size: 16,
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                                              SizedBox(width: 4),
+                                              Text(
+                                                _formatTime(
+                                                  latestBooking!['booking_time'] ??
+                                                      '',
+                                                ),
+                                                style: TextStyle(
+                                                  color: Color(0xFF6D838E),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),),
-                              SizedBox(height: 16),
+                              ),
+                             // SizedBox(height: 16),
                             ],
                           ),
                         ),

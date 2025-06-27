@@ -107,21 +107,7 @@ class _AppbardocState extends State<Appbardoc> {
               ),
             ],
           ),
-          Spacer(),
-          Column(
-            children: [
-              SizedBox(height: 10),
-              SmallImageContainer(
-                image: AssetImage("images/notification.png"),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ChatBotScreen()),
-                  );
-                },
-              ),
-            ],
-          ),
+
         ],
       ),
     );

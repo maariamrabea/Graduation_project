@@ -45,11 +45,12 @@ class Second_Screen extends StatelessWidget {
             child: buildDots(currentPage),
           ),
           Positioned(
-              top: screenHeight * (574 / screenHeight),
-              left: screenWidth * (45 / screenWidth),
+              top: screenHeight * (585 / screenHeight),
+              left: screenWidth * (60 / screenWidth),
               child: Text(
-                  "Track your mood and \n   reflect on your day",
-                  style:AppTextStyles.f24.copyWith(color: Colors.white))),
+                  "Just take a photo — get\n      results in seconds.",
+                  style:AppTextStyles.f20)),
+
           Positioned(
             top: screenHeight * (686 / screenHeight),
             left: screenWidth * (162 / screenWidth),

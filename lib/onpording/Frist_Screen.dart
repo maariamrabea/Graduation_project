@@ -51,11 +51,11 @@ class _Frist_ScreenState extends State<Frist_Screen> {
             child: buildDots(_currentPage),
           ),
           Positioned(
-            top: screenHeight * (574 / screenHeight),
-            left: screenWidth * (45 / screenWidth),
+            top: screenHeight * (585 / screenHeight),
+            left: screenWidth * (30 / screenWidth),
             child: Text(
-              "Track your mood and \n   reflect on your day",
-                style:AppTextStyles.f24.copyWith(color: Colors.white))),
+              " AI analyzes skin images to \nidentify possible conditions.",
+                style:AppTextStyles.f20)),
           Positioned(
             top: screenHeight * (686 / screenHeight),
             left: screenWidth * (162 / screenWidth),

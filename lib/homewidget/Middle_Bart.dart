@@ -1,47 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:graduationproject/fontstyle.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../ExtraScreen/RemindersScreen.dart';
 
-class MiddleBart extends StatefulWidget {
-  const MiddleBart({super.key});
+class MiddleBart extends StatelessWidget {
+  final String doctorName;
+  final String doctorImage;
+  final String appointmentDate;
 
-  @override
-  _MiddleBartState createState() => _MiddleBartState();
-}
-
-class _MiddleBartState extends State<MiddleBart> {
-  String? doctorName;
-  String? doctorSpecialty;
-  String? doctorImage;
-  String? appointmentDateString;
-
-  @override
-  void initState() {
-    super.initState();
-    loadDoctorData();
-  }
-
-  void loadDoctorData() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      doctorName = prefs.getString('doctor_name') ?? "No doctor yet";
-      doctorSpecialty = prefs.getString('doctor_specialty') ?? "";
-      doctorImage = prefs.getString('doctor_image');
-      appointmentDateString = prefs.getString('appointment_date');
-    });
-  }
+  const MiddleBart({
+    Key? key,
+    required this.doctorName,
+    required this.doctorImage,
+    required this.appointmentDate,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
-
-    DateTime? appointmentDate =
-        appointmentDateString != null
-            ? DateTime.tryParse(appointmentDateString!)
-            : null;
 
     return Container(
       height: screenHeight * (227 / screenHeight),
@@ -68,72 +44,79 @@ class _MiddleBartState extends State<MiddleBart> {
                     MaterialPageRoute(builder: (context) => RemindersScreen()),
                   );
                 },
-                child: Text(
-                  "See all",
-                  style: AppTextStyles.f18.copyWith(fontSize: 12),
-                ),
+                child: Text("See all",   style: TextStyle(
+                  fontSize: 14,
+                  color: Color(0xFF567A88),
+                  fontWeight: FontWeight.w600,
+                )),
               ),
             ],
           ),
           const SizedBox(height: 16),
-          // Container(
-          //   height: 131,
-          //   width: 355,
-          //   decoration: BoxDecoration(
-          //     color: Colors.white,
-          //     borderRadius: BorderRadius.circular(12),
-          //   ),
-          //   child: Padding(
-          //     padding: const EdgeInsets.all(15),
-          //     child: Column(
-          //       children: [
-          //         Row(
-          //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //           children: [
-          //             doctorImage != null
-          //                 ? Image.asset(doctorImage!, width: 50, height: 50)
-          //                 : const Icon(Icons.person, size: 50),
-          //             Column(
-          //               crossAxisAlignment: CrossAxisAlignment.start,
-          //               children: [
-          //                 Text(
-          //                   doctorName ?? '',
-          //                   style: AppTextStyles.f16.copyWith(
-          //                     color: Colors.black,
-          //                     fontWeight: FontWeight.w500,
-          //                   ),
-          //                 ),
-          //                 Text(
-          //                   doctorSpecialty ?? '',
-          //                   style: AppTextStyles.f14.copyWith(fontSize: 12),
-          //                 ),
-          //               ],
-          //             ),
-          //             const SizedBox(width: 90),
-          //             GestureDetector(
-          //               onTap: () {},
-          //               child: Container(
-          //                 width: 38,
-          //                 height: 38,
-          //                 decoration: BoxDecoration(
-          //                   color: ColorsApp.color1,
-          //                   borderRadius: BorderRadius.circular(20),
-          //                   image: const DecorationImage(
-          //                     image: AssetImage("images/messages-3.png"),
-          //                   ),
-          //                 ),
-          //               ),
-          //             ),
-          //           ],
-          //         ),
-          //         const SizedBox(height: 15),
-          //         appointmentDate != null
-          //             ? Time(appointmentDate: appointmentDate)
-          //             : const Text("No appointment selected"),
-          //       ],
-          //     ),
-          //   ),
-          // ),
+          Container(
+            height: 131,
+            width: 355,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(15),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      doctorImage.isNotEmpty
+                          ? Image.network(
+                            doctorImage,
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              print('Image load error: $error');
+                              return const Icon(Icons.person, size: 50);
+                            },
+                          )
+                          : const Icon(Icons.person, size: 50),
+                      SizedBox(width: 20),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            doctorName,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Text(
+                            'Dermatological examination',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Container(
+                    padding: EdgeInsets.all(10),
+                    height: 40,
+                    width: 311,
+                    decoration: BoxDecoration(
+                      color: Color(0xFFE3EDF2), // الخلفية
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child:Center(child:  Text(
+                      appointmentDate,
+                      style: TextStyle(fontSize: 14),
+                    ),),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );

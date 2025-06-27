@@ -1,5 +1,4 @@
 
-
 class ApiConstants {
   static String signup = "api/users/signup/";
   static String login = "api/users/login/";
@@ -8,6 +7,6 @@ class ApiConstants {
   static String new_password = "api/users/password/reset/confirm/";
   static String forget_password = "api/users/password/otp/request/";
   static String scan_result = "api/scans/create/";
-  static String dio = "https://41ba-156-197-111-242.ngrok-free.app/";
+  static String dio = "https://d11e-197-35-70-1.ngrok-free.app/";
   static String doctorLatestPendingBooking = "api/doctors/bookings/accepted/";
   static const String bookingUpdate = 'api/doctors/bookings/<int:pk>/update/';}

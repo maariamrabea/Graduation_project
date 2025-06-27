@@ -28,11 +28,11 @@ class Third_Screen extends StatelessWidget {
             child: buildDots(currentPage),
           ),
           Positioned(
-              top: screenHeight * (574 / screenHeight),
-              left: screenWidth * (45 / screenWidth),
+              top: screenHeight * (585 / screenHeight),
+              left: screenWidth * (50 / screenWidth),
               child: Text(
-                  "Track your mood and \n   reflect on your day",
-                  style:AppTextStyles.f24.copyWith(color: Colors.white))),
+                  "Your data stays safe and\n                confidential.",
+                  style:AppTextStyles.f20.copyWith(color: Colors.white))),
           Positioned(
             top: screenHeight * (686 / screenHeight),
             left: screenWidth * (162 / screenWidth),

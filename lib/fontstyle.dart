@@ -7,6 +7,11 @@ class AppTextStyles {
     fontWeight: FontWeight.bold,
     color: Colors.black,
   );
+  static TextStyle f20 = GoogleFonts.poppins(
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+    color: Colors.white,
+  );
   static TextStyle f14 = GoogleFonts.poppins(
     fontSize: 14,
     color: Colors.grey,

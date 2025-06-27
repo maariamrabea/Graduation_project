@@ -1,10 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:graduationproject/BottomNavBarDoctor.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../ApiConstants.dart';
-import '../dio_helper.dart';import '../registration/login.dart';
+import '../dio_helper.dart';
+import '../registration/login.dart';
 
 class AppointmentsScreen extends StatefulWidget {
   @override
@@ -15,7 +17,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   List<dynamic> pendingBookings = [];
-  List<dynamic> acceptedBookings = [];
+  List<dynamic> acceptedBookings = []; // هيظل موجود بس مش هيستخدم للآن
   bool isLoading = true;
   String? errorMessage;
 
@@ -95,7 +97,9 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
     }
 
     try {
-      final url = '${ApiConstants.dio}${ApiConstants.bookingUpdate.replaceFirst('<int:pk>', bookingId)}';
+      final url =
+          '${ApiConstants.dio}${ApiConstants.bookingUpdate.replaceFirst('<int:pk>', bookingId)}';
+      print('Updating booking at URL: $url with status: $status');
 
       final response = await DioHelper.patchWithAuthRequest(
         url,
@@ -104,15 +108,42 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
 
       if (response.statusCode == 200) {
         final data = response.data;
+        print('Response data: $data');
 
-        setState(() {
-          final booking = pendingBookings.firstWhere((b) => b['id'].toString() == bookingId, orElse: () => null);
+        setState(() async {
+          final booking = pendingBookings.firstWhere(
+            (b) => b['id'].toString() == bookingId,
+            orElse: () => null,
+          );
           if (booking != null) {
             pendingBookings.removeWhere((b) => b['id'].toString() == bookingId);
 
             if (status == 'accepted') {
-              acceptedBookings.add(booking);
-              _showSuccessDialog(data['booking_date'], data['booking_time']);
+              // إزالة الحجز من Upcoming بس، ما يضافش لـ acceptedBookings
+              _showSuccessDialog(
+                booking['booking_date'],
+                booking['booking_time'],
+              );
+              // تحديث SharedPreferences (لو عايزة تظهر في HomeScreen)
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.setString(
+                'doctorName',
+                booking['doctor']['full_name'] ?? 'Unknown Doctor',
+              );
+              await prefs.setString(
+                'doctorImage',
+                booking['doctor']['profile_picture_url'] ?? '',
+              );
+              await prefs.setString(
+                'appointmentDate',
+                '${_formatDate(booking['booking_date'])} ${_formatTime(booking['booking_time'])}',
+              );
+              await prefs.setBool('hasAppointment', true);
+              // العودة لـ HomeScreen
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => BottomNavBarDoctor()),
+              );
             } else if (status == 'rejected') {
               _showRejectDialog();
             }
@@ -120,71 +151,86 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
         });
       } else {
         setState(() {
-          errorMessage = 'Failed with status: ${response.statusCode}';
+          errorMessage =
+              'Failed with status: ${response.statusCode} - ${response.data}';
         });
       }
     } catch (e) {
       setState(() {
         errorMessage = 'Error updating booking: $e';
       });
+      print('Update error details: $e');
     }
   }
 
-
-  // بقية الكود زي ما هو
   void _showConfirmationDialog(String bookingId, String status) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        contentPadding: const EdgeInsets.all(20),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'Confirm Rejection',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.grey[700]),
+      builder:
+          (context) => AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
             ),
-            SizedBox(height: 10),
-            Text(
-              'Are you sure you want to reject this appointment?',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.grey[600]),
-            ),
-            SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            contentPadding: const EdgeInsets.all(20),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context); // close the dialog
-                    _handleRejectStatus(bookingId); // separate logic to handle reject
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF567A88),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                Text(
+                  'Confirm Rejection',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey[700],
                   ),
-                  child: Text('Yes', style: TextStyle(color: Colors.white)),
                 ),
-                ElevatedButton(
-                  onPressed: () => Navigator.pop(context),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.grey[400],
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                  ),
-                  child: Text('No', style: TextStyle(color: Colors.grey[800])),
+                SizedBox(height: 10),
+                Text(
+                  'Are you sure you want to reject this appointment?',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.grey[600]),
+                ),
+                SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        _handleRejectStatus(bookingId);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFF567A88),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      child: Text('Yes', style: TextStyle(color: Colors.white)),
+                    ),
+                    ElevatedButton(
+                      onPressed: () => Navigator.pop(context),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.grey[400],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      child: Text(
+                        'No',
+                        style: TextStyle(color: Colors.grey[800]),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
-        ),
-      ),
+          ),
     );
   }
 
   void _handleRejectStatus(String bookingId) async {
-    final url = '${ApiConstants.dio}${ApiConstants.bookingUpdate.replaceFirst('<int:pk>', bookingId)}';
+    final url =
+        '${ApiConstants.dio}${ApiConstants.bookingUpdate.replaceFirst('<int:pk>', bookingId)}';
 
     try {
       final response = await DioHelper.patchWithAuthRequest(
@@ -271,7 +317,6 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-
                 SizedBox(height: 20),
                 Text(
                   'Appointment Rejected',
@@ -342,16 +387,11 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-
         backgroundColor: Color(0xFF567A88),
         elevation: 0,
         title: Text(
           'Appointments',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
+          style: TextStyle(fontWeight: FontWeight.normal),
         ),
         actions: [
           IconButton(
@@ -364,20 +404,13 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
         bottom: TabBar(
           controller: _tabController,
           indicatorColor: Colors.white,
-          // لون الخط تحت التاب النشط
           indicatorWeight: 2.5,
           labelColor: Colors.white,
-          // لون التاب المختار
           unselectedLabelColor: Colors.grey[400],
-          // لون التاب غير النشط
           labelStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-          tabs: [
-            Tab(text: 'Upcoming'), // بدل Pending لو حابة تغيري الاسم
-            Tab(text: 'Accepted'),
-          ],
+          tabs: [Tab(text: 'Upcoming'), Tab(text: 'Accepted')],
         ),
       ),
-
       body:
           isLoading
               ? Center(child: CircularProgressIndicator())

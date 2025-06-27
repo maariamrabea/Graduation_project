@@ -20,10 +20,8 @@ class RemindersPage extends StatelessWidget {
         backgroundColor: ColorsApp.color1,
         title: Text(
           "Reminders",
-          style: AppTextStyles.f18.copyWith(
-            color: Colors.white,
-            fontWeight: FontWeight.w500,
-          ),
+          style: TextStyle(fontWeight: FontWeight.normal),
+
         ),
         centerTitle: true,
       ),

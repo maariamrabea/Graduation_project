@@ -2,9 +2,9 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:graduationproject/fontstyle.dart';
 
+import '../BottomBar.dart';
 import '../Widget/ElevatedButton.dart';
 import '../Widget/arrow_back.dart';
-import '../BottomBar.dart';
 import '../screen buttonbar/Scan screen.dart';
 
 class BeginningScan extends StatelessWidget {
@@ -26,10 +26,11 @@ class BeginningScan extends StatelessWidget {
           color: Colors.black,
         ),
         backgroundColor: Colors.white,
-        title: Text("Scan", style: AppTextStyles.f18.copyWith(
-    color: Colors.black,
-    fontWeight: FontWeight.w500,
-    ),),
+        title: Text(
+          "Scan",
+          style: TextStyle(fontWeight: FontWeight.normal),
+
+        ),
         centerTitle: true,
       ),
       body: Stack(
@@ -51,7 +52,6 @@ class BeginningScan extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
 
                   children: [
-
                     SizedBox(height: 30),
                     Image.asset("images/Group 1000003101.png"),
                     SizedBox(height: 25),

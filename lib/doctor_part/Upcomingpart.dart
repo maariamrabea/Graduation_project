@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'AcceptedPage.dart';
 
 // ✅ قائمة الحجز القادمة (مشتركة بين التابين)
@@ -22,6 +23,7 @@ List<Map<String, String>> upcomingBookings = [
 
 class Upcomingpart extends StatefulWidget {
   final TabController tabController;
+
   const Upcomingpart({super.key, required this.tabController});
 
   @override
@@ -86,206 +88,206 @@ class _UpcomingpartState extends State<Upcomingpart> {
     return upcomingBookings.isEmpty
         ? const Center(child: Text('No bookings yet'))
         : ListView.builder(
-      itemCount: upcomingBookings.length,
-      itemBuilder: (context, index) {
-        final booking = upcomingBookings[index];
-        return Card(
-          margin: const EdgeInsets.all(12),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
+          itemCount: upcomingBookings.length,
+          itemBuilder: (context, index) {
+            final booking = upcomingBookings[index];
+            return Card(
+              margin: const EdgeInsets.all(12),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Image.asset(
-                      'assets/user (2).png',
-                      width: 40,
-                      height: 40,
-                    ),
-                    const SizedBox(width: 12),
-                    Column(
+                    Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Image.asset(
+                          'assets/user (2).png',
+                          width: 40,
+                          height: 40,
+                        ),
+                        const SizedBox(width: 12),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              booking['name']!,
+                              style: const TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            const Text(
+                              'Dermatological examination',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.calendar_today,
+                          color: Color(0xFF567A88),
+                          size: 15,
+                        ),
+                        const SizedBox(width: 5),
                         Text(
-                          booking['name']!,
+                          booking['date']!,
                           style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                            color: Color(0xFF567A88),
                           ),
                         ),
-                        const SizedBox(height: 4),
-                        const Text(
-                          'Dermatological examination',
-                          style: TextStyle(
+                        const SizedBox(width: 20),
+                        const Icon(
+                          Icons.access_time,
+                          color: Color(0xFF567A88),
+                          size: 15,
+                        ),
+                        const SizedBox(width: 5),
+                        Text(
+                          booking['time']!,
+                          style: const TextStyle(
                             fontSize: 12,
-                            color: Colors.grey,
+                            color: Color(0xFF567A88),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 12),
+
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              foregroundColor: const Color(0xFF567A88),
+                              backgroundColor: Colors.white,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                ),
+                              ),
+                            ),
+                            onPressed: () => _showCancelDialog(index),
+                            child: const Text('Cancel'),
+                          ),
+                        ),
+                        Container(
+                          width: 1,
+                          height: 40,
+                          color: const Color(0xFF567A88).withOpacity(0.4),
+                        ),
+                        Expanded(
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              foregroundColor: const Color(0xFF567A88),
+                              backgroundColor: Colors.white,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(10),
+                                  bottomRight: Radius.circular(10),
+                                ),
+                              ),
+                            ),
+                            onPressed: () {
+                              final acceptedBooking = upcomingBookings[index];
+
+                              setState(() {
+                                upcomingBookings.removeAt(index);
+                                acceptedBookings.add(acceptedBooking);
+                              });
+
+                              showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(16),
+                                    ),
+                                    title: const Text(
+                                      'Appointment Accepted',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                        color: Colors.black87,
+                                      ),
+                                    ),
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        const Text(
+                                          'Appointment scheduled successfully for:',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(fontSize: 14),
+                                        ),
+                                        const SizedBox(height: 8),
+                                        Text(
+                                          '${acceptedBooking['date']} at ${acceptedBooking['time']}',
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                            color: Color(0xFF567A88),
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 20),
+                                        SizedBox(
+                                          width: double.infinity,
+                                          child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: const Color(
+                                                0xFF567A88,
+                                              ),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                              ),
+                                            ),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                              widget.tabController.animateTo(1);
+                                            },
+                                            child: const Text(
+                                              'Close',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                            child: const Text('Accept'),
                           ),
                         ),
                       ],
                     ),
                   ],
                 ),
-                const SizedBox(height: 12),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.calendar_today,
-                      color: Color(0xFF567A88),
-                      size: 15,
-                    ),
-                    const SizedBox(width: 5),
-                    Text(
-                      booking['date']!,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Color(0xFF567A88),
-                      ),
-                    ),
-                    const SizedBox(width: 20),
-                    const Icon(
-                      Icons.access_time,
-                      color: Color(0xFF567A88),
-                      size: 15,
-                    ),
-                    const SizedBox(width: 5),
-                    Text(
-                      booking['time']!,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Color(0xFF567A88),
-                      ),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: 12),
-
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                          foregroundColor: const Color(0xFF567A88),
-                          backgroundColor: Colors.white,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(10),
-                              bottomLeft: Radius.circular(10),
-                            ),
-                          ),
-                        ),
-                        onPressed: () => _showCancelDialog(index),
-                        child: const Text('Cancel'),
-                      ),
-                    ),
-                    Container(
-                      width: 1,
-                      height: 40,
-                      color: const Color(0xFF567A88).withOpacity(0.4),
-                    ),
-                    Expanded(
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                          foregroundColor: const Color(0xFF567A88),
-                          backgroundColor: Colors.white,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(10),
-                              bottomRight: Radius.circular(10),
-                            ),
-                          ),
-                        ),
-                        onPressed: () {
-                          final acceptedBooking = upcomingBookings[index];
-
-                          setState(() {
-                            upcomingBookings.removeAt(index);
-                            acceptedBookings.add(acceptedBooking);
-                          });
-
-                          showDialog(
-                            context: context,
-                            barrierDismissible: false,
-                            builder: (context) {
-                              return AlertDialog(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                title: const Text(
-                                  'Appointment Accepted',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                    color: Colors.black87,
-                                  ),
-                                ),
-                                content: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const Text(
-                                      'Appointment scheduled successfully for:',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(fontSize: 14),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      '${acceptedBooking['date']} at ${acceptedBooking['time']}',
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                        color: Color(0xFF567A88),
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 20),
-                                    SizedBox(
-                                      width: double.infinity,
-                                      child: ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: const Color(
-                                            0xFF567A88,
-                                          ),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                            BorderRadius.circular(8),
-                                          ),
-                                        ),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                          widget.tabController.animateTo(1);
-                                        },
-                                        child: const Text(
-                                          'Close',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                          );
-                        },
-                        child: const Text('Accept'),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         );
-      },
-    );
   }
 }

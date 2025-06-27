@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:graduationproject/fontstyle.dart';
 
 import '../ApiConstants.dart';
+import '../Screenappbar/Notifications.dart';
 import '../Screenappbar/chatpot.dart';
 import '../dio_helper.dart';
 import 'con_Icon.dart';
@@ -122,7 +123,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ChatBotScreen()),
+                MaterialPageRoute(builder: (context) => NotificationScreen()),
               );
             },
           ),
